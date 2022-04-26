@@ -36,6 +36,16 @@ public class Customer extends BaseEntity {
     @JsonIgnoreProperties(value = { "accountTransactions", "customer" }, allowSetters = true)
     private Set<Account> accounts = new HashSet<>();
 
+    public void addAccount(Account account) {
+        accounts.add(account);
+        account.setCustomer(this);
+    }
+
+    public void removeAccount(Account account) {
+        accounts.remove(account);
+        account.setCustomer(null);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {

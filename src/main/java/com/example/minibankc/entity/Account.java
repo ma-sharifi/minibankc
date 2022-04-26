@@ -40,6 +40,7 @@ public class Account extends BaseEntity {
     public Account(Customer customer) {
         this.customer = customer;
     }
+
     public void addTransaction(AccountTransaction transaction) {
         accountTransactions.add(transaction);
         balance= balance+transaction.getAmount();
