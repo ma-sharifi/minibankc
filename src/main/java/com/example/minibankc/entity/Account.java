@@ -56,10 +56,10 @@ public class Account extends BaseEntity {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof com.example.minibank.entity.Account)) {
+        if (!(o instanceof Account)) {
             return false;
         }
-        return super.getId() != null && super.getId().equals(((com.example.minibank.entity.Account) o).getId());
+        return super.getId() != null && super.getId().equals(((Account) o).getId());
     }
 
     @Override
