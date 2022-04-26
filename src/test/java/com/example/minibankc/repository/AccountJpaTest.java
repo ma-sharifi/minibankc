@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(MockitoExtension.class)
 @SpringBootTest
-public class AccountJpaTest {
+class AccountJpaTest {
 
     @Autowired
     private AccountRepository accountRepository;
@@ -31,13 +31,15 @@ public class AccountJpaTest {
     private TransactionTemplate transactionTemplate;
 
     @Test
-    void shouldSaveAndLoadOrder() {
+    void shouldSaveAndLoad() {
+        //The first saves a newly created Account in the database
         Long accountId = transactionTemplate.execute((ts) -> {
-            Account customer =
+            Account account =
                     new Account(1, null, null);
-            accountRepository.save(customer);
-            return customer.getId();
+            accountRepository.save(account);
+            return account.getId();
         });
+        //The second transaction loads the Account and verifies that its fields are properly initialized
         transactionTemplate.execute((ts) -> {
             Account account = accountRepository.findById(accountId).get();
             assertEquals(1, account.getBalance());
