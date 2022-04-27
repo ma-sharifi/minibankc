@@ -24,12 +24,10 @@ public class DataLoader implements CommandLineRunner {
 
     private final CustomerRepository customerRepository;
     private final AccountRepository accountRepository;
-    private final AccountTransactionRepository accountTransactionRepository;
 
-    public DataLoader(CustomerRepository customerRepository, AccountRepository accountRepository, AccountTransactionRepository accountTransactionRepository) {
+    public DataLoader(CustomerRepository customerRepository, AccountRepository accountRepository) {
         this.customerRepository = customerRepository;
         this.accountRepository = accountRepository;
-        this.accountTransactionRepository = accountTransactionRepository;
     }
 
     @Override
@@ -48,7 +46,7 @@ public class DataLoader implements CommandLineRunner {
         Customer customerPaul = new Customer();
         customerPaul.setName("Paul");
         customerPaul.setSurname("Peter");
-        Customer savedCustomerPaul = customerRepository.save(customerPaul);
+        customerRepository.save(customerPaul);
 
         Account account = new Account(savedCustomer);
         Account account2 = new Account(savedCustomer);

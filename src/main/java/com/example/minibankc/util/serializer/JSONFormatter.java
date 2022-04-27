@@ -1,7 +1,9 @@
 package com.example.minibankc.util.serializer;
 
-import com.example.minibankc.util.serializer.GsonExclusionStrategy;
-import com.google.gson.*;
+import com.google.gson.FieldNamingPolicy;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.StringReader;
@@ -14,13 +16,6 @@ import java.util.Map;
  * is not thread-safe.
  * Extracted from Paypal
  */
-
-/**
- * @author Mahdi Sharifi
- * @version 1.0.0
- * @since 11/11/2019
- * extracted from Paypal
- */
 public final class JSONFormatter {
 
     /**
@@ -28,13 +23,13 @@ public final class JSONFormatter {
      * property to set a fieldnamingpolicy other than
      * LOWER_CASE_WITH_UNDERSCORES used by PayPal REST APIs
      */
-    private static FieldNamingPolicy FIELD_NAMING_POLICY = FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES;
+    private static final FieldNamingPolicy FIELD_NAMING_POLICY = FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES;
     /**
      * Gson
      */
     public static Gson GSON = new GsonBuilder()
 //            .serializeNulls()
-             .setPrettyPrinting()
+            .setPrettyPrinting()
             .setExclusionStrategies(new GsonExclusionStrategy())
             .setFieldNamingPolicy(FIELD_NAMING_POLICY).create();
 
@@ -71,7 +66,8 @@ public final class JSONFormatter {
     }
 
     public static <T> Map toMap(T t) {
-        Type type = new TypeToken<Map<String, String>>(){}.getType();
+        Type type = new TypeToken<Map<String, String>>() {
+        }.getType();
         return GSON.fromJson(toJSON(t), type);
     }
 
@@ -83,7 +79,6 @@ public final class JSONFormatter {
      * @param clazz          Target class
      * @return Object of the target type
      */
-    //messageArray = JSONFormatter.fromJSON(messageListStr, ResponseMessage[].class);
     public static <T> T fromJSON(String responseString, Class<T> clazz) {
         T t = null;
         if (clazz.isAssignableFrom(responseString.getClass())) {
@@ -95,23 +90,11 @@ public final class JSONFormatter {
     }
 
     public static <T> T fromJSON(String json, Type typeOfT) throws JsonSyntaxException {
-        if(json == null) {
+        if (json == null) {
             return null;
         } else {
             StringReader reader = new StringReader(json);
-            T target = GSON.fromJson(reader, typeOfT);
-            return target;
+            return GSON.fromJson(reader, typeOfT);
         }
-    }
-
-    public static boolean isJsonValid(String json) {
-        try {
-            JsonParser parser = new JsonParser();
-            JsonElement jsonTree = parser.parse(json);
-            return true;
-        } catch (Exception ex) {
-
-        }
-        return false;
     }
 }
