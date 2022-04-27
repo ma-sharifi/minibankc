@@ -90,6 +90,14 @@ class CustomerServiceTest {
         customerService = new CustomerServiceImpl(customerRepository,null,null,customerMapper);
     }
 
+    @Test
+    void testThrowsCustomerNotFoundException() {
+        Throwable exception = assertThrows(CustomerNotFoundException.class, () ->
+                customerService.getCustomerInfo(100000)
+        );
+        assertEquals("Could not find customer with id: 100000", exception.getMessage());
+    }
+
     @AfterEach
     public void tearDown() {
         account1 = account2 = null;
