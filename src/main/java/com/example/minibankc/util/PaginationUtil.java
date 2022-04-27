@@ -44,6 +44,6 @@ public final class PaginationUtil {
     }
 
     private static String preparePageUri(UriComponentsBuilder uriBuilder, int pageNumber, int pageSize) {
-        return uriBuilder.replaceQueryParam("page", new Object[]{Integer.toString(pageNumber)}).replaceQueryParam("size", new Object[]{Integer.toString(pageSize)}).toUriString().replace(",", "%2C").replace(";", "%3B");
+        return uriBuilder.replaceQueryParam("page", Integer.toString(pageNumber)).replaceQueryParam("size", Integer.toString(pageSize)).toUriString().replace(",", "%2C").replace(";", "%3B");
     }
 }

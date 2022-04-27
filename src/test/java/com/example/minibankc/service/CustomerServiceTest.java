@@ -4,6 +4,7 @@ import com.example.minibankc.dto.CustomerDto;
 import com.example.minibankc.entity.Account;
 import com.example.minibankc.entity.AccountTransaction;
 import com.example.minibankc.entity.Customer;
+import com.example.minibankc.exception.CustomerNotFoundException;
 import com.example.minibankc.mapper.CustomerMapper;
 import com.example.minibankc.repository.CustomerRepository;
 import com.example.minibankc.service.impl.CustomerServiceImpl;
@@ -19,6 +20,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 /**
@@ -48,7 +50,7 @@ class CustomerServiceTest {
     private AccountTransaction accountTransaction3;
     private Set<Account> accountList=new HashSet<>();
     private Set<AccountTransaction> accountTransactionList=new HashSet<>();
-    private Set<AccountTransaction> accountTransactionList2=new HashSet<>();
+    private final Set<AccountTransaction> accountTransactionList2=new HashSet<>();
 
     @Test
     void serviceTest(){
@@ -85,8 +87,6 @@ class CustomerServiceTest {
         accountTransactionList2.add(accountTransaction3);
 
         when(customerRepository.findById(1L)).thenReturn(Optional.ofNullable(customer));
-        System.out.println("#customer: "+customer);
-        System.out.println("#customer2: "+customerRepository.findById(1L).get());
         customerService = new CustomerServiceImpl(customerRepository,null,null,customerMapper);
     }
 

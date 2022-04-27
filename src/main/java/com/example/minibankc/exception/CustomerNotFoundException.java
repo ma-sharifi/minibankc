@@ -9,6 +9,6 @@ package com.example.minibankc.exception;
 public class CustomerNotFoundException extends RuntimeException {
 
     public CustomerNotFoundException(Long id) {
-        super("Could not find customer with id " + id);
+        super("Could not find customer with id: " + id);
     }
 }

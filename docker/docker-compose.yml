@@ -1,0 +1,38 @@
+version: '2.1'
+services:
+  minibankc:
+    image: picher/minibankc:0.0.1-SNAPSHOT
+    container_name: minibankc
+    environment:
+      PROFILE: "dev"
+    ports:
+      - "8080:8080"
+    networks:
+      backend:
+        aliases:
+          - "minibankc"
+  sonarqube:
+    image: sonarqube:latest
+    container_name: sonarqube
+    volumes:
+      - sonarqube_conf:/opt/sonarqube/conf
+      - sonarqube_data:/opt/sonarqube/data
+      - sonarqube_extensions:/opt/sonarqube/extensions
+      - sonarqube_bundled-plugins:/opt/sonarqube/lib/bundled-plugins
+      - sonarqube_logs:/opt/sonarqube/logs
+    ports:
+      - 9000:9000
+      - 9092:9092
+    networks:
+      backend:
+        aliases:
+          - "sonarqube"
+volumes:
+  sonarqube_conf:
+  sonarqube_data:
+  sonarqube_extensions:
+  sonarqube_bundled-plugins:
+  sonarqube_logs:
+networks:
+  backend:
+    driver: bridge
