@@ -11,12 +11,13 @@ Welcome to Mini BankC.
 Documentation is: http://localhost:8080/swagger-ui/index.html
 
 0- Ping service
-http://localhost:8080/v1/customers/ping
+GET http://localhost:8080/v1/customers/ping
 
 1- Add Account to current customer:
+POST http://localhost:8080/v1/customers/1/accounts
 
 2- Get customer information:
-http://localhost:8080/v1/customers/1
+GET http://localhost:8080/v1/customers/1
 
 This file will be completed...
 
