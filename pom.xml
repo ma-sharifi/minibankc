@@ -8,11 +8,29 @@
 		<version>2.6.7</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
+
 	<groupId>com.example</groupId>
 	<artifactId>minibankc</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+
 	<name>minibankc</name>
 	<description>Mini BankC Application</description>
+
+	<organization>
+		<name>Mahdi Sharifi Mock Company</name>
+		<url>https://tatipati.com/</url>
+	</organization>
+
+	<developers>
+		<developer>
+			<id>ma-sharifi</id>
+			<name>Mahdi Sharifi</name>
+			<email>mahdi.elu@gmail.com</email>
+		</developer>
+	</developers>
+
+	<inceptionYear>2022</inceptionYear>
+
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
