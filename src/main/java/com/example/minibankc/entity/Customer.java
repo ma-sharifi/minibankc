@@ -20,8 +20,7 @@ import java.util.Set;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
-@Setter
+@Getter @Setter @ToString
 public class Customer extends BaseEntity {
 
     @Size(min = 2, max = 60)
@@ -32,7 +31,7 @@ public class Customer extends BaseEntity {
     @Column(name = "surname", length = 60)
     private String surname;
 
-    @OneToMany(mappedBy = "customer",cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.EAGER,mappedBy = "customer",cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties(value = { "accountTransactions", "customer" }, allowSetters = true)
     private Set<Account> accounts = new HashSet<>();
 
@@ -60,15 +59,5 @@ public class Customer extends BaseEntity {
     @Override
     public int hashCode() {
         return getClass().hashCode();
-    }
-
-    @Override
-    public String toString() {
-        return "Customer{" +
-            "id=" + getId() +
-            ", name='" + getName() + "'" +
-            ", surname='" + getSurname() + "'" +
-            ", createdAt='" + getCreatedAt() + "'" +
-            "}";
     }
 }

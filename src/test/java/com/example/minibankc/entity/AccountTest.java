@@ -41,14 +41,16 @@ class AccountTest {
     @Test
     void equalsVerifier() throws Exception {
         TestUtil.equalsVerifier(Account.class);
-        Account accounts1 = new Account();
-        accounts1.setId(1L);
+        Account account1 = new Account();
+        account1.setId(1L);
+
         Account accounts2 = new Account();
-        accounts2.setId(accounts1.getId());
-        assertThat(accounts1).isEqualTo(accounts2);
+        accounts2.setId(account1.getId());
+
+        assertThat(account1).isEqualTo(accounts2);
         accounts2.setId(2L);
-        assertThat(accounts1).isNotEqualTo(accounts2);
-        accounts1.setId(null);
-        assertThat(accounts1).isNotEqualTo(accounts2);
+        assertThat(account1).isNotEqualTo(accounts2);
+        account1.setId(null);
+        assertThat(account1).isNotEqualTo(accounts2);
     }
 }
