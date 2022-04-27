@@ -2,8 +2,10 @@ package com.example.minibankc.dto;
 
 import com.example.minibankc.entity.Customer;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Size;
 import java.util.Set;
@@ -19,7 +21,7 @@ import java.util.Set;
  */
 @EqualsAndHashCode(callSuper = true)
 @Schema(description = "save customers data")
-@Data
+@Data @AllArgsConstructor @NoArgsConstructor
 public class CustomerDto extends BaseDto {
 
     @Size(min = 2, max = 60)
@@ -30,4 +32,8 @@ public class CustomerDto extends BaseDto {
 
     private Set<AccountDto> accounts ;
 
+    public CustomerDto(String name, String surname) {
+        this.name = name;
+        this.surname = surname;
+    }
 }

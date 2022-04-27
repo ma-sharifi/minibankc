@@ -70,6 +70,7 @@ public class AccountTransaction extends BaseEntity {
                 "id=" + getId() +
                 ", amount=" + getAmount() +
                 ", referenceNo=" + getReferenceNo() +
+                ", newBalancd='" + getNewBalance() + "'" +
                 ", createdAt='" + getCreatedAt() + "'" +
                 "}";
     }

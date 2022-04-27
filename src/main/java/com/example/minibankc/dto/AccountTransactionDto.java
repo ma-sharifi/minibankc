@@ -29,6 +29,4 @@ public class AccountTransactionDto extends BaseDto {
 
     private Long referenceNo;
 
-    private AccountDto account;
-
 }

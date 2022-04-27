@@ -39,6 +39,8 @@
 		<docker.image.prefix>picher</docker.image.prefix>
 		<cucumber.version>7.3.1</cucumber.version>
 		<openapi.version>1.6.7</openapi.version>
+		<gson.version>2.9.0</gson.version>
+
 	</properties>
 	<dependencies>
 		<dependency>
@@ -101,6 +103,11 @@
 			<groupId>org.mapstruct</groupId>
 			<artifactId>mapstruct</artifactId>
 			<version>${mapstruct.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>${gson.version}</version>
 		</dependency>
 	</dependencies>
 

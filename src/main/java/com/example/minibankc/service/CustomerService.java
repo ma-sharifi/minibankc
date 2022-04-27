@@ -10,5 +10,5 @@ import com.example.minibankc.dto.CustomerDto;
  */
 
 public interface CustomerService {
-    CustomerDto getCustomer(long customerId);
+    CustomerDto getCustomerInfo(long customerId);
 }

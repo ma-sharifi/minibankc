@@ -1,8 +1,10 @@
 package com.example.minibankc.dto;
 
+import com.example.minibankc.util.GSONModel;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.GeneratedValue;
@@ -19,10 +21,11 @@ import java.util.Date;
  * @since 4/27/22
  */
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class BaseDto implements Serializable {
+public class BaseDto extends GSONModel {//implements Serializable
 
     private Long id;
 

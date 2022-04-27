@@ -1,6 +1,7 @@
 package com.example.minibankc.dto;
 
 import com.example.minibankc.entity.Account;
+import com.example.minibankc.entity.AccountTransaction;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -25,9 +26,8 @@ public class AccountDto extends BaseDto{
 
     private Long balance;
 
-    @JsonIgnoreProperties(value = { "account" }, allowSetters = true)
-    private Set<AccountTransactionDto> accountTransactionsDto = new HashSet<>();
+    private Set<AccountTransactionDto> accountTransactions;
 
-    @JsonIgnoreProperties(value = { "account" }, allowSetters = true)
-    private CustomerDto customerDto;
+//    @JsonIgnoreProperties(value = { "account" }, allowSetters = true)
+//    private CustomerDto customerDto;
 }

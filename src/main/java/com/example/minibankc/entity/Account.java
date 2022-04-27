@@ -2,10 +2,7 @@ package com.example.minibankc.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -28,7 +25,7 @@ public class Account extends BaseEntity {
     private long balance;
 
     //https://vladmihalcea.com/the-best-way-to-map-a-onetomany-association-with-jpa-and-hibernate/
-    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties(value = { "account" }, allowSetters = true)
     private Set<AccountTransaction> accountTransactions = new HashSet<>();
 
@@ -75,6 +72,7 @@ public class Account extends BaseEntity {
             "id=" + getId() +
             ", balance=" + getBalance() +
             ", createdAt='" + getCreatedAt() + "'" +
+            ", transactions='" + getAccountTransactions() + "'" +
             "}";
     }
 }
