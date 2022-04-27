@@ -1,4 +1,4 @@
-package com.example.minibankc.util;
+package com.example.minibankc.util.serializer;
 
 
 import com.google.gson.ExclusionStrategy;

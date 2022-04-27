@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.validation.constraints.NotNull;
 
@@ -21,7 +22,7 @@ import javax.validation.constraints.NotNull;
 
 @EqualsAndHashCode(callSuper = true)
 @Schema(description = "save Transaction of account")
-@Data
+@Data @ToString(callSuper=true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class AccountTransactionDto extends BaseDto {
 

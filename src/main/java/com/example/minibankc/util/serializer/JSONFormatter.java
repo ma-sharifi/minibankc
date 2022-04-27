@@ -1,11 +1,11 @@
-package com.example.minibankc.util;
+package com.example.minibankc.util.serializer;
 
+import com.example.minibankc.util.serializer.GsonExclusionStrategy;
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.StringReader;
 import java.lang.reflect.Type;
-import java.util.Date;
 import java.util.Map;
 
 /**

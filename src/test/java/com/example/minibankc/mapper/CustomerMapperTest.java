@@ -1,15 +1,10 @@
 package com.example.minibankc.mapper;
 
-import com.example.minibankc.dto.AccountDto;
-import com.example.minibankc.dto.AccountTransactionDto;
 import com.example.minibankc.dto.CustomerDto;
 import com.example.minibankc.entity.Account;
 import com.example.minibankc.entity.AccountTransaction;
 import com.example.minibankc.entity.Customer;
-import com.example.minibankc.util.JSONFormatter;
-import com.jayway.jsonpath.internal.JsonFormatter;
 import org.junit.jupiter.api.Test;
-import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 

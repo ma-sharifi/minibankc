@@ -20,7 +20,6 @@ import javax.validation.constraints.NotNull;
  */
 @Entity
 @Table(name = "account_transaction")
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter

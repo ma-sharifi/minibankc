@@ -70,7 +70,6 @@ class CustomerControllerTest {
 
         assertEquals("Mahdi",customerDto.getName() );
         assertEquals("Sharifi",customerDto.getSurname() );
-        assertEquals(2,customerDto.getAccounts().size());
     }
 
 }

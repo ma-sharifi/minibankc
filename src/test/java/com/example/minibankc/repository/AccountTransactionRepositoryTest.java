@@ -9,9 +9,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.support.TransactionTemplate;
 
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.contains;
 
 /**
  * @author Mahdi Sharifi
@@ -55,6 +61,7 @@ class AccountTransactionRepositoryTest {
         Long accountId = transactionTemplate.execute((ts) -> {
 
             Account account = new Account();
+            account.setBalance(1);
 
             AccountTransaction accountTransaction = new AccountTransaction(1);
             accountTransaction.setReferenceNo(referenceNo);
@@ -68,15 +75,12 @@ class AccountTransactionRepositoryTest {
         });
 
         transactionTemplate.execute((ts) -> {
-                        Account account = accountRepository.findById(accountId).get();
+            Account account = accountRepository.findById(accountId).get();
             assertEquals(1, account.getBalance());
 
             Set<AccountTransaction> accountTransactions = account.getAccountTransactions();
-            AccountTransaction accountTransaction=accountTransactions.stream().sorted().findFirst().get();
             assertEquals(2, accountTransactions.size());
-            assertEquals(1, accountTransaction.getAmount());
-            assertEquals(1, accountTransaction.getNewBalance());
-            assertEquals(123L, accountTransaction.getReferenceNo());
+
             return null;
         });
     }
