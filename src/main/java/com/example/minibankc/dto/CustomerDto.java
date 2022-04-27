@@ -1,6 +1,7 @@
 package com.example.minibankc.dto;
 
 import com.example.minibankc.entity.Customer;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,6 +23,7 @@ import java.util.Set;
 @EqualsAndHashCode(callSuper = true)
 @Schema(description = "save customers data")
 @Data @AllArgsConstructor @NoArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class CustomerDto extends BaseDto {
 
     @Size(min = 2, max = 60)

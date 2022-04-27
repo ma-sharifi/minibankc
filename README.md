@@ -1,5 +1,5 @@
-**## Mini BankC Assignment**
-This is an assignment about a mini bank.
+**## Mini BankC Assessment**
+This is an assessment about a mini bank.
 
 # Introduction
 Welcome to Mini BankC.  
@@ -9,6 +9,14 @@ Welcome to Mini BankC.
 3.  A H2 database used to hold the data.
 
 Documentation is: http://localhost:8080/swagger-ui/index.html
+
+0- Ping service
+http://localhost:8080/v1/customers/ping
+
+1- Add Account to current customer:
+
+2- Get customer information:
+http://localhost:8080/v1/customers/1
 
 This file will be completed...
 

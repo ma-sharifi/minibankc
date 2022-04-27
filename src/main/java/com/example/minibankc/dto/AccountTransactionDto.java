@@ -1,6 +1,8 @@
 package com.example.minibankc.dto;
 
 import com.example.minibankc.entity.AccountTransaction;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -20,13 +22,16 @@ import javax.validation.constraints.NotNull;
 @EqualsAndHashCode(callSuper = true)
 @Schema(description = "save Transaction of account")
 @Data
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class AccountTransactionDto extends BaseDto {
 
     @NotNull
     private Long amount;
 
+    @JsonProperty("new_balance")
     private Long newBalance;
 
+    @JsonProperty("reference_no")
     private Long referenceNo;
 
 }

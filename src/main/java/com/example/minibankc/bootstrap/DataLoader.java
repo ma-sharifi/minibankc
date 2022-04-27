@@ -39,7 +39,7 @@ public class DataLoader implements CommandLineRunner {
         log.info("#mock data is generated.");
     }
 
-    private void loadData() {
+    public Customer loadData() {
         Customer customer = new Customer();
         customer.setName("Mahdi");
         customer.setSurname("Sharifi");
@@ -51,13 +51,24 @@ public class DataLoader implements CommandLineRunner {
         Customer savedCustomerPaul = customerRepository.save(customerPaul);
 
         Account account = new Account(savedCustomer);
+        Account account2 = new Account(savedCustomer);
+
         AccountTransaction accountTransaction = new AccountTransaction(1);
         accountTransaction.setReferenceNo(Instant.now().toEpochMilli() / 1000);
         account.addTransaction(accountTransaction);
+
         AccountTransaction accountTransaction2 = new AccountTransaction(-1);
         accountTransaction2.setReferenceNo(Instant.now().toEpochMilli() / 1000 + 1);
         account.addTransaction(accountTransaction2);
-        Account accountPersisted = accountRepository.save(account);
-        log.debug("#accountPersisted : {}", accountPersisted);
+
+        AccountTransaction accountTransaction3 = new AccountTransaction(3);
+        accountTransaction.setReferenceNo(Instant.now().toEpochMilli() / 1000);
+        account2.addTransaction(accountTransaction3);
+
+        accountRepository.save(account);
+        log.debug("#account : {}", account);
+        accountRepository.save(account2);
+        log.debug("#account2 : {}", account2);
+        return customer;
     }
 }

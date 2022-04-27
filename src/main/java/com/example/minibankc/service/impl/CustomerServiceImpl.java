@@ -41,7 +41,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public CustomerDto getCustomerInfo(long customerId) {
         Optional<Customer> customerOptional= customerRepository.findById(customerId);
-        customerOptional.ifPresent(customer -> log.debug("#customerOptional wit id: "+customerId+" ;"+customer));
+        customerOptional.ifPresent(customer -> log.debug("#customerOptional with id: "+customerId+" ;"+customer));
         return customerOptional.map(customerMapper::toDto).orElse(null);
     }
 }
