@@ -43,8 +43,15 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public Optional<AccountDto> findOne(Long id) {
+        log.debug("Request to get Account : {}", id);
+        return accountRepository.findById(id).map(accountMapper::toDto);
+    }
+
+    @Override
     public AccountDto openAccountForExistingCustomer(long customerId,long initialCredit) throws CustomerNotFoundException{
-        log.debug("If initialCredit is not Zero a transaction will be sent to the new account : {}", initialCredit);
+        log.debug("Request to open an Account. If initialCredit>0 then a transaction will be added : {}", initialCredit);
         Optional<Customer> customerOptional= customerRepository.findById(customerId);
         if(customerOptional.isPresent()) {
             Customer customer=customerOptional.get();
@@ -56,8 +63,7 @@ public class AccountServiceImpl implements AccountService {
                 account.addTransaction(accountTransaction);
             } else account.setBalance(initialCredit);
 
-            Account accountPersisted=accountRepository.save(account);
-            log.debug("#accountPersisted : {}", accountPersisted);
+            accountRepository.save(account);
             return accountMapper.toDto(account);
         }else
             throw new CustomerNotFoundException(customerId);

@@ -1,4 +1,4 @@
-package com.example.minibankc.util;
+package com.example.minibankc.util.serializer;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

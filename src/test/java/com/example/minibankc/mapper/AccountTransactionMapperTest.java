@@ -9,6 +9,8 @@ import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.Date;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
@@ -40,10 +42,12 @@ class AccountTransactionMapperTest {
     @Test
     void givenDtoToEntity_whenMaps_thenCorrect() {
         AccountTransactionDto dto = new AccountTransactionDto();
-        dto.setAmount(1L);
-        dto.setNewBalance(2L);
+        dto.setAmount(10L);
+        dto.setNewBalance(20L);
         dto.setId(1L);
         dto.setReferenceNo(123L);
+        dto.setCreatedAt(new Date());
+
         AccountTransaction entity = mapper.toEntity(dto);
 
         assertEquals(dto.getId(), entity.getId());
