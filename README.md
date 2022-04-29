@@ -68,6 +68,10 @@ For CD you must do some steps:
         Name: DOCKER_PASSWORD , Value: ***. because *** is my docker hub password.
 This video can help: https://www.youtube.com/watch?v=R8_veQiYBjI
 ```
+#POSTMAN
+You can find Postman file in postman folder in root of project.
+For each API call wrote test with Postman.
+
 ## Contact
 I'd like you to send me an email on <mahdi.elu@gmail.com> about anything you'd want to say about this software.
 
