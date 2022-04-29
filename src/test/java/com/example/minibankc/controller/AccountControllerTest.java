@@ -64,5 +64,12 @@ class AccountControllerTest {
         assertEquals(1,accountDto.getAccountTransactions().size() );
     }
 
+    @Test
+    void givenAccountId_thenCorrect(){
+        String resourceUrl = uri+"/v1/accounts/"+1;
+        ResponseEntity<AccountDto> responseEntity = this.restTemplate.getForEntity(resourceUrl, AccountDto.class);
+        AccountDto accountDto=responseEntity.getBody();
+        assertEquals(1,accountDto.getId() );
+    }
 
 }
