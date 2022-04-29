@@ -61,7 +61,7 @@ class CustomerControllerTest {
 
     @Test
     void pingShouldReturnPong() {
-        ResponseEntity<String> responseEntity = this.restTemplate.getForEntity(uri + "/v1/customers/ping", String.class);
+        ResponseEntity<String> responseEntity = this.restTemplate.getForEntity(uri + "/v1/ping", String.class);
         assertThat(responseEntity.getBody()).isEqualTo("pong");
     }
     @Test

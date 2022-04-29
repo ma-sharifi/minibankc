@@ -8,9 +8,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.ui.ModelExtensionsKt;
 
+import java.util.Optional;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -64,6 +66,7 @@ class IntegrateJpaTest {
             Account account=accounts.stream().findFirst().get();
             assertEquals(1, accounts.size());
             assertEquals(2, account.getAccountTransactions().size());
+
             return null;
         });
     }

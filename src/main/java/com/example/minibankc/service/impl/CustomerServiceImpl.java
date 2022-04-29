@@ -29,15 +29,11 @@ import java.util.Optional;
 public class CustomerServiceImpl implements CustomerService {
 
     private final CustomerRepository customerRepository;
-    private final AccountRepository accountRepository;
-    private final AccountTransactionRepository accountTransactionRepository;
 
     private final CustomerMapper customerMapper;
 
-    public CustomerServiceImpl(CustomerRepository customerRepository, AccountRepository accountRepository, AccountTransactionRepository accountTransactionRepository, CustomerMapper customerMapper) {
+    public CustomerServiceImpl(CustomerRepository customerRepository, CustomerMapper customerMapper) {
         this.customerRepository = customerRepository;
-        this.accountRepository = accountRepository;
-        this.accountTransactionRepository = accountTransactionRepository;
         this.customerMapper = customerMapper;
     }
 

@@ -42,7 +42,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * IT without explicitly starting a Servlet container
  */
 @AutoConfigureMockMvc
-class AccountControllerTestIT {
+class AccountControllerTestITT {
 
     @SpyBean
     AccountServiceImpl accountService;

@@ -38,7 +38,6 @@ To clone and run this application, you'll need [Git](https://git-scm.com), [Mave
 $ git clone https://github.com/ma-sharifi/minibankc
 
 You can run it from Maven directly using the Spring Boot Maven plugin.
-If you do this it will pick up changes that you make in the project immediately:
 $ ./mvnw spring-boot:run
 
 # To build the code as a docker image, open a command-line 
@@ -66,7 +65,7 @@ For CD you must do some steps:
 2- Define DOCKER_USERNAME, DOCKER_PASSWORD in your github repository secrets.
     Go to Github Repository->Settings->Secrets-> New repository secret:
         Name: DOCKER_USERNAME , Value: picher. bacuse picher is my docker hub account.
-        Name: DOCKER_PASSWORD , Value: ***. bacuse *** is my docker hub password.
+        Name: DOCKER_PASSWORD , Value: ***. because *** is my docker hub password.
 This video can help: https://www.youtube.com/watch?v=R8_veQiYBjI
 ```
 ## Contact

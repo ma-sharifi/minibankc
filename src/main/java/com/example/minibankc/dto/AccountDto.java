@@ -29,4 +29,11 @@ public class AccountDto extends BaseDto {
     @JsonProperty("transactions")
     private Set<AccountTransactionDto> accountTransactions;
 
+    @Override
+    public String toString() {
+        return "AccountDto{" +
+                "id=" + getId() +
+                " ;balance=" + getBalance() +
+                '}';
+    }
 }

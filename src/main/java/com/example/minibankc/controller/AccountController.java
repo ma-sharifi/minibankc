@@ -40,8 +40,8 @@ public class AccountController {
      * @param id the id of the accountsDto to retrieve.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the accountsDto, or with status {@code 404 (Not Found)}.
      */
-    @GetMapping("/accounts/{id}")
-    public ResponseEntity<AccountDto> getAccounts(@PathVariable Long id) {
+    @GetMapping("/accounts/{account-id}")
+    public ResponseEntity<AccountDto> getAccount(@PathVariable("account-id") Long id) {
         log.debug("REST request to get Accounts : {}", id);
         Optional<AccountDto> accountsDto = accountService.findOne(id);
         return ResponseUtil.wrapOrNotFound(accountsDto);
@@ -49,7 +49,7 @@ public class AccountController {
 
 
     @PostMapping("/customers/{customer-id}/accounts")
-    public ResponseEntity<AccountDto> getCustomerById(@PathVariable("customer-id") long customerId
+    public ResponseEntity<AccountDto> openAccountForExistingCustomer(@PathVariable("customer-id") long customerId
             , @RequestHeader("Initial-Credit") long initialCredit){
          log.debug("REST request to create account for customer : {}", customerId);
         AccountDto accountDto=accountService.openAccountForExistingCustomer(customerId,initialCredit);
