@@ -32,7 +32,7 @@ jobs:
       - name: BUil and Push Docker Image
         uses: mr-smithers-excellent/docker-build-push@v5
         with:
-          image: picher/simple-web-app
+          image: picher/minibankc
           registry: docker.io
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
