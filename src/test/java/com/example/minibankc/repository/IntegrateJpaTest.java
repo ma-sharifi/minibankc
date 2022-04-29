@@ -22,7 +22,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @since 4/26/22
  */
 
-@ExtendWith(MockitoExtension.class)
 @SpringBootTest
 class IntegrateJpaTest {
 
@@ -31,10 +30,6 @@ class IntegrateJpaTest {
 
     @Autowired
     private AccountRepository accountRepository;
-
-    @Autowired
-    private AccountTransactionRepository accountTransactionRepository;
-
 
     @Autowired
     private TransactionTemplate transactionTemplate;
@@ -56,7 +51,7 @@ class IntegrateJpaTest {
             accountTransaction2.setReferenceNo(referenceNo + 1);
             account.addTransaction(accountTransaction2);
 
-            Account accountPersisted = accountRepository.save(account);
+            accountRepository.save(account);
 
             return customer.getId();
         });

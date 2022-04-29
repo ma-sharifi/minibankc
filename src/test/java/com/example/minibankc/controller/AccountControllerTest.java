@@ -24,7 +24,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * https://www.linkedin.com/in/mahdisharifi/
  * @since 4/27/22
  */
-@ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class AccountControllerTest {
     private String uri;

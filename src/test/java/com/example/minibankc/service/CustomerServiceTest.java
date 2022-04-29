@@ -11,13 +11,13 @@ import com.example.minibankc.service.impl.CustomerServiceImpl;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -30,7 +30,6 @@ import static org.mockito.Mockito.when;
  * @since 4/27/22
  */
 
-@ExtendWith(MockitoExtension.class)
 @SpringBootTest
 class CustomerServiceTest {
 
@@ -47,7 +46,6 @@ class CustomerServiceTest {
     private Account account2;
     private AccountTransaction accountTransaction1;
     private AccountTransaction accountTransaction2;
-    private AccountTransaction accountTransaction3;
     private Set<Account> accountList=new HashSet<>();
     private Set<AccountTransaction> accountTransactionList=new HashSet<>();
     private final Set<AccountTransaction> accountTransactionList2=new HashSet<>();
@@ -78,7 +76,7 @@ class CustomerServiceTest {
         accountTransaction2 = new AccountTransaction(2,5,2L,account1);
         accountTransaction2.setId(2L);
 
-        accountTransaction3 = new AccountTransaction(-1,1,3L,account1);
+        AccountTransaction accountTransaction3 = new AccountTransaction(-1, 1, 3L, account1);
         accountTransaction3.setId(3L);
 
         accountTransactionList.add(accountTransaction1);

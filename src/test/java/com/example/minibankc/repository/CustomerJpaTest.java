@@ -1,9 +1,6 @@
 package com.example.minibankc.repository;
 
-import com.example.minibankc.entity.Account;
-import com.example.minibankc.entity.AccountTransaction;
 import com.example.minibankc.entity.Customer;
-import com.example.minibankc.repository.CustomerRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -11,12 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.support.TransactionTemplate;
 
-import java.time.Instant;
 import java.util.HashSet;
-import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
 
 /**
  * @author Mahdi Sharifi
@@ -24,7 +18,6 @@ import static org.junit.jupiter.api.Assertions.assertNull;
  * https://www.linkedin.com/in/mahdisharifi/
  * @since 4/26/22
  */
-@ExtendWith(MockitoExtension.class)
 @SpringBootTest
 class CustomerJpaTest {
 
@@ -46,7 +39,7 @@ class CustomerJpaTest {
             Customer customer = customerRepository.findById(customerId).get();
             assertEquals("Mahdi", customer.getName());
             assertEquals("Sharifi", customer.getSurname());
-            assertEquals(new HashSet<>(),customer.getAccounts());
+            assertEquals(new HashSet<>(), customer.getAccounts());
             return null;
         });
     }
