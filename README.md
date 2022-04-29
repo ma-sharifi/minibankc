@@ -59,6 +59,7 @@ $ mvn sonar:sonar -Dsonar.host.url=http://localhost:9000 -Dsonar.login=8fab5c5ec
 ## CI/CD
 Pipelines let you define how your deployed code flows from one environment to the next.
 I tried to use Heroku for CI/CD but I got error "Item could not be retrieved: Internal Server Error".
+Then I managed to use Github Action. My pipeline has 2 steps. One Maven for test and buil then Docker.
 ```bash
 For CD you must do some steps:
 1- Go to you docker hub account and create a Repository. I created "minibankc" repository in my docker hub for this project.
