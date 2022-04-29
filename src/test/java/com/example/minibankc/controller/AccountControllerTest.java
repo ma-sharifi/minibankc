@@ -3,11 +3,14 @@ package com.example.minibankc.controller;
 import com.example.minibankc.dto.AccountDto;
 import com.example.minibankc.dto.CustomerDto;
 import com.example.minibankc.entity.Account;
+import io.swagger.v3.oas.annotations.security.OAuthFlow;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.*;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -26,23 +29,27 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class AccountControllerTest {
+
     private String uri;
 
-    @MockBean
+    @LocalServerPort
+    private int port;
+
+    @Autowired
     private AccountController accountController;
-    private final TestRestTemplate restTemplate = new TestRestTemplate();
+
+    @Autowired
+    private TestRestTemplate restTemplate;
 
     @PostConstruct
     public void init() {
-        uri = "http://localhost:" + 8080;
+        uri = "http://localhost:" + port;
     }
-
 
     @Test
-    void contextLoads() {
+    void contextLoads() throws Exception {
         assertThat(accountController).isNotNull();
     }
-
 
     @Test
     void openAccountForExistingCustomer(){
@@ -56,4 +63,6 @@ class AccountControllerTest {
         assertEquals(5,accountDto.getBalance() );
         assertEquals(1,accountDto.getAccountTransactions().size() );
     }
+
+
 }

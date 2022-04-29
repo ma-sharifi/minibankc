@@ -37,16 +37,20 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class CustomerControllerTest {
 
-
     private String uri;
 
-    @MockBean
+    @LocalServerPort
+    private int port;
+
+    @Autowired
     private CustomerController customerController;
-    private final TestRestTemplate restTemplate = new TestRestTemplate();
+
+    @Autowired
+    private TestRestTemplate restTemplate;
 
     @PostConstruct
     public void init() {
-        uri = "http://localhost:" + 8080;
+        uri = "http://localhost:" + port;
     }
 
 

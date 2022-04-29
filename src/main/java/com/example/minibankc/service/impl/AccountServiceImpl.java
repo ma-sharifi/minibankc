@@ -31,14 +31,12 @@ public class AccountServiceImpl implements AccountService {
 
     private final CustomerRepository customerRepository;
     private final AccountRepository accountRepository;
-    private final AccountTransactionRepository accountTransactionRepository;
 
     private final AccountMapper accountMapper;
 
-    public AccountServiceImpl(CustomerRepository customerRepository, AccountRepository accountRepository, AccountTransactionRepository accountTransactionRepository, AccountMapper accountMapper) {
+    public AccountServiceImpl(CustomerRepository customerRepository, AccountRepository accountRepository, AccountMapper accountMapper) {
         this.customerRepository = customerRepository;
         this.accountRepository = accountRepository;
-        this.accountTransactionRepository = accountTransactionRepository;
         this.accountMapper = accountMapper;
     }
 
