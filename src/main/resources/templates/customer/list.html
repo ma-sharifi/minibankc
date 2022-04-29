@@ -1,0 +1,19 @@
+<html xmlns:th="https://thymeleaf.org">
+<table>
+     <tr th:each="customer: ${customer}">
+        <td th:text="${customer.name}">Name</td>
+        <td th:text="${customer.surname}">Surname</td>
+        <td th:text="${customer.accounts.size}">size</td>
+    </tr>
+
+</table>
+<table>
+    <tr th:each="account: ${customer.accounts}">
+        <td th:text="${account.balance}">Name</td>
+        <td th:text="${account.accountTransactions.size}">size</td>
+<!--        <tr th:each="accountTransaction: ${account.accountTransactions}">-->
+<!--           <td th:text="${accountTransaction.amount}">amount</td>-->
+<!--        </tr>-->
+    </tr>
+</table>
+</html>
