@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 4/27/22
  */
 @RestController
-@RequestMapping("/v1/customers")
+@RequestMapping("/v1")
 public class CustomerController {
 
     private final CustomerService customerService;
@@ -30,7 +30,7 @@ public class CustomerController {
         return ResponseEntity.ok().body("pong");
     }
 
-    @GetMapping("{customer-id}")
+    @GetMapping("/customers/{customer-id}")
     public ResponseEntity<CustomerDto> getCustomerById(@PathVariable("customer-id") long customerId){
         return ResponseEntity.ok().body(customerService.getCustomerInfo(customerId));
     }

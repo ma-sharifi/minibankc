@@ -50,13 +50,6 @@ class CustomerServiceTest {
     private Set<AccountTransaction> accountTransactionList=new HashSet<>();
     private final Set<AccountTransaction> accountTransactionList2=new HashSet<>();
 
-    @Test
-    void serviceTest(){
-        CustomerDto customerDto= customerService.getCustomerInfo(1);
-        assertEquals(customer.getName(), customerDto.getName());
-        assertEquals(customer.getSurname(), customerDto.getSurname());
-        assertEquals(customer.getAccounts().size(), customerDto.getAccounts().size());
-    }
 
     @BeforeEach
     public void setUp() {
@@ -85,15 +78,22 @@ class CustomerServiceTest {
         accountTransactionList2.add(accountTransaction3);
 
         when(customerRepository.findById(1L)).thenReturn(Optional.ofNullable(customer));
-        customerService = new CustomerServiceImpl(customerRepository,null,null,customerMapper);
+        customerService = new CustomerServiceImpl(customerRepository,customerMapper);
     }
 
     @Test
-    void testThrowsCustomerNotFoundException() {
+    void WhenCustomerNotFound_ThrowsCustomerNotFoundException() {
         Throwable exception = assertThrows(CustomerNotFoundException.class, () ->
                 customerService.getCustomerInfo(100000)
         );
         assertEquals("Could not find customer with id: 100000", exception.getMessage());
+    }
+    @Test
+    void WhenCustomerIs1ThenReturnCustomerInfo(){
+        CustomerDto customerDto= customerService.getCustomerInfo(1);
+        assertEquals(customer.getName(), customerDto.getName());
+        assertEquals(customer.getSurname(), customerDto.getSurname());
+        assertEquals(customer.getAccounts().size(), customerDto.getAccounts().size());
     }
 
     @AfterEach

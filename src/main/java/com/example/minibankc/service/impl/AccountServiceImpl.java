@@ -41,7 +41,6 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public Optional<AccountDto> findOne(Long id) {
         log.debug("Request to get Account : {}", id);
         return accountRepository.findById(id).map(accountMapper::toDto);

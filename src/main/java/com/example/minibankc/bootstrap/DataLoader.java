@@ -64,7 +64,7 @@ public class DataLoader implements CommandLineRunner {
         account2.addTransaction(accountTransaction3);
 
         accountRepository.save(account);
-        log.debug("#account : {}", account);
+        log.debug("#account1 : {}", account);
         accountRepository.save(account2);
         log.debug("#account2 : {}", account2);
         return customer;
