@@ -78,11 +78,9 @@ public class CustomerController {
      */
     @PostMapping("/customers")
     public ResponseEntity<CustomerDto> createCustomer(@Valid @RequestBody CustomerDto customerDto) throws URISyntaxException {
-        System.out.println("##createCustomer->customerDto = " + customerDto);
         if(customerDto==null)  throw new CustomerNotFoundException(0L);
         log.debug("REST request to save Customer : {}", customerDto.toJSON());
         if (customerDto.getId() != null) {
-//            throw new CustomerNotFoundException(customerDto.getId());
             throw new BadRequestAlertException("A new customer cannot already have an ID", ENTITY_NAME, "idexists");
         }
         CustomerDto result = customerService.save(customerDto);

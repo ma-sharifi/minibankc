@@ -5,6 +5,7 @@ import com.example.minibankc.IntegrationTest;
 import com.example.minibankc.dto.CustomerDto;
 import com.example.minibankc.entity.Customer;
 import com.example.minibankc.exception.BadRequestAlertException;
+import com.example.minibankc.exception.CustomerNotFoundException;
 import com.example.minibankc.mapper.CustomerMapper;
 import com.example.minibankc.repository.CustomerRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
@@ -20,6 +22,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -111,8 +114,8 @@ class CustomerControllerTestIT {
     @Transactional
     void getAllCustomers() throws Exception {
         // Initialize the database
+        int count = (int) customerRepository.count();
         customerRepository.saveAndFlush(customer);
-
         // Get all the customerList
         restCustomerMockMvc
                 .perform(get(ENTITY_API_URL))
@@ -120,7 +123,9 @@ class CustomerControllerTestIT {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(jsonPath("$.[*].id").value(hasItem(customer.getId().intValue())))
                 .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
-                .andExpect(jsonPath("$.[*].surname").value(hasItem(DEFAULT_SURNAME)));
+                .andExpect(jsonPath("$.[*].surname").value(hasItem(DEFAULT_SURNAME)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(count + 1)));
+
     }
 
     @Test
@@ -143,7 +148,9 @@ class CustomerControllerTestIT {
     @Transactional
     void getNonExistingCustomer() throws Exception {
         // Get the customer
-        restCustomerMockMvc.perform(get(ENTITY_API_URL_ID, Long.MAX_VALUE)).andExpect(status().isNotFound());
+        restCustomerMockMvc.perform(get(ENTITY_API_URL_ID, Long.MAX_VALUE))
+                .andExpect(status().isNotFound())
+                .andExpect(result -> assertTrue(result.getResolvedException() instanceof CustomerNotFoundException));
     }
 
 }

@@ -1,6 +1,7 @@
 package com.example.minibankc.service;
 
 import com.example.minibankc.dto.AccountDto;
+import com.example.minibankc.exception.AccountNotFoundException;
 import com.example.minibankc.exception.CustomerNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,7 +24,7 @@ public interface AccountService {
      * @param id the id of the entity.
      * @return the entity.
      */
-    Optional<AccountDto> findOne(Long id);
+    AccountDto findOne(Long id) throws AccountNotFoundException;
 
     /**
      * Get all the accounts.

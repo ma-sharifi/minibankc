@@ -4,6 +4,7 @@ import com.example.minibankc.dto.AccountDto;
 import com.example.minibankc.entity.Account;
 import com.example.minibankc.entity.AccountTransaction;
 import com.example.minibankc.entity.Customer;
+import com.example.minibankc.exception.AccountNotFoundException;
 import com.example.minibankc.exception.CustomerNotFoundException;
 import com.example.minibankc.mapper.AccountMapper;
 import com.example.minibankc.mapper.CustomerMapper;
@@ -43,9 +44,10 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Optional<AccountDto> findOne(Long id) {
+    public AccountDto findOne(Long id) throws AccountNotFoundException {
         log.debug("Request to get Account : {}", id);
-        return accountRepository.findById(id).map(accountMapper::toDto);
+        Optional<Account> accountOptional= accountRepository.findById(id);
+        return accountOptional.map(accountMapper::toDto).orElseThrow(()->new AccountNotFoundException(id));
     }
 
     @Override

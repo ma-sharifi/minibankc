@@ -40,16 +40,16 @@ public final class TestUtil {
         return mapper;
     }
 
-//    /**
-//     * Convert an object to JSON byte array.
-//     *
-//     * @param object the object to convert.
-//     * @return the JSON byte array.
-//     * @throws IOException
-//     */
-//    public static byte[] convertObjectToJsonBytes(Object object) throws IOException {
-//        return mapper.writeValueAsBytes(object);
-//    }
+    /**
+     * Convert an object to JSON byte array.
+     *
+     * @param object the object to convert.
+     * @return the JSON byte array.
+     * @throws IOException
+     */
+    public static byte[] convertObjectToJsonBytes(Object object) throws IOException {
+        return mapper.writeValueAsBytes(object);
+    }
 
     /**
      * Create a byte array with a specific size filled with specified data.

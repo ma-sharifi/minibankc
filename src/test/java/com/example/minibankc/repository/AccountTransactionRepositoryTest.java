@@ -4,6 +4,7 @@ import com.example.minibankc.entity.Account;
 import com.example.minibankc.entity.AccountTransaction;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.support.TransactionTemplate;
 
@@ -47,7 +48,7 @@ class AccountTransactionRepositoryTest {
     }
 
     @Test
-    void testAccountTransactionAndAccount() {
+    void shouldSaveAccountTransactionAndAccount() {
         long referenceNo = 1L;
         Long accountId = transactionTemplate.execute((ts) -> {
 

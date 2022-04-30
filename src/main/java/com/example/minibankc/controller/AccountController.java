@@ -2,7 +2,9 @@ package com.example.minibankc.controller;
 
 import com.example.minibankc.dto.AccountDto;
 import com.example.minibankc.dto.CustomerDto;
+import com.example.minibankc.exception.AccountNotFoundException;
 import com.example.minibankc.exception.BadRequestAlertException;
+import com.example.minibankc.exception.CustomerNotFoundException;
 import com.example.minibankc.service.AccountService;
 import com.example.minibankc.service.CustomerService;
 import com.example.minibankc.util.PaginationUtil;
@@ -49,16 +51,15 @@ public class AccountController {
     }
 
     /**
-     * {@code GET  /accounts/:id} : get the "id" accounts.
+     * {@code GET  /account/:id} : get the "id" account.
      *
-     * @param id the id of the accountsDto to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the accountsDto, or with status {@code 404 (Not Found)}.
+     * @param id the id of the accountDto to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the accountDto, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/accounts/{account-id}")
-    public ResponseEntity<AccountDto> getAccount(@PathVariable("account-id") Long id) {
-        log.debug("REST request to get Accounts : {}", id);
-        Optional<AccountDto> accountsDto = accountService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(accountsDto);
+    public ResponseEntity<AccountDto> getAccount(@PathVariable("account-id") Long id) throws AccountNotFoundException{
+        log.debug("REST request to get Account : {}", id);
+        return ResponseEntity.ok().body(accountService.findOne(id));
     }
 
     /**
@@ -70,7 +71,7 @@ public class AccountController {
      */
     @PostMapping("/customers/{customer-id}/accounts")
     public ResponseEntity<AccountDto> openAccountForExistingCustomer(@PathVariable("customer-id") long customerId
-            , @RequestHeader("Initial-Credit") long initialCredit){
+            , @RequestHeader("Initial-Credit") long initialCredit) throws CustomerNotFoundException {
         log.debug("REST request to create account for customer : {}", customerId);
         if(initialCredit<0)
             throw new BadRequestAlertException("initial Credit can not be less than zero!", ENTITY_NAME, "creditlessthanzero");
@@ -81,10 +82,10 @@ public class AccountController {
     }
 
     /**
-     * {@code GET  /accounts} : get all the accounts.
+     * {@code GET  /account} : get all the account.
      *
      * @param pageable the pagination information.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of accounts in body.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of account in body.
      */
     @GetMapping("/accounts")
     public ResponseEntity<List<AccountDto>> getAllAccounts(@ParameterObject Pageable pageable) {
