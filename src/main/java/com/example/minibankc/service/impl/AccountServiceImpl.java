@@ -4,6 +4,7 @@ import com.example.minibankc.dto.AccountDto;
 import com.example.minibankc.entity.Account;
 import com.example.minibankc.entity.AccountTransaction;
 import com.example.minibankc.entity.Customer;
+import com.example.minibankc.exception.AccountNotFoundException;
 import com.example.minibankc.exception.CustomerNotFoundException;
 import com.example.minibankc.mapper.AccountMapper;
 import com.example.minibankc.mapper.CustomerMapper;
@@ -12,6 +13,8 @@ import com.example.minibankc.repository.AccountTransactionRepository;
 import com.example.minibankc.repository.CustomerRepository;
 import com.example.minibankc.service.AccountService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,9 +44,16 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Optional<AccountDto> findOne(Long id) {
+    public AccountDto findOne(Long id) throws AccountNotFoundException {
         log.debug("Request to get Account : {}", id);
-        return accountRepository.findById(id).map(accountMapper::toDto);
+        Optional<Account> accountOptional= accountRepository.findById(id);
+        return accountOptional.map(accountMapper::toDto).orElseThrow(()->new AccountNotFoundException(id));
+    }
+
+    @Override
+    public Page<AccountDto> findAll(Pageable pageable) {
+        log.debug("Request to get all Account");
+        return accountRepository.findAll(pageable).map(accountMapper::toDto);
     }
 
     @Override
@@ -65,4 +75,5 @@ public class AccountServiceImpl implements AccountService {
         }else
             throw new CustomerNotFoundException(customerId);
     }
+
 }

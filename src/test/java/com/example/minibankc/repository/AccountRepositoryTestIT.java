@@ -30,7 +30,7 @@ class AccountRepositoryTestIT {
     AccountRepository accountRepository;
 
     @Test
-    void testSaveNewAccountForExistingCustomer(){
+    void shouldSaveNewAccountForExistingCustomer(){
         Account account = new Account();
         account.setBalance(1000L);
         Account accountPersisted=entityManager.merge(account);

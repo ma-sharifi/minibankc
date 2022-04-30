@@ -26,7 +26,7 @@ import javax.validation.constraints.NotNull;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class AccountTransactionDto extends BaseDto {
 
-    @NotNull
+    @NotNull(message = "#amount can not be null")
     private Long amount;
 
     @JsonProperty("new_balance")

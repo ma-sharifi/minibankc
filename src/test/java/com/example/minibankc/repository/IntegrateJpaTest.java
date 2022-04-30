@@ -7,7 +7,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.ui.ModelExtensionsKt;
@@ -37,7 +39,7 @@ class IntegrateJpaTest {
     private TransactionTemplate transactionTemplate;
 
     @Test
-    void testAllJpas(){
+    void shouldSaveAllRelatedEntities(){
         long referenceNo=123L;
         Long customerId = transactionTemplate.execute((ts) -> {
             Customer customer = new Customer("Mahdi", "Sharifi", null);

@@ -44,7 +44,7 @@
 					},
 					{
 						"key": "Initial-Credit",
-						"value": "2",
+						"value": "1",
 						"type": "text"
 					}
 				],
@@ -222,6 +222,167 @@
 						"v1",
 						"accounts",
 						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create new Customer",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201 using to have\", function () {",
+							"  pm.response.to.have.status(201);",
+							"});",
+							"",
+							"",
+							"pm.test(\"The response has all properties\", () => {",
+							"    //parse the response JSON and test three properties",
+							"    const responseJson = pm.response.json();",
+							"    pm.expect(responseJson.balance).exist;",
+							"    pm.expect(responseJson.id).exist;",
+							"    pm.expect(responseJson.created_at).exist;",
+							"    pm.expect(responseJson.transactions).exist;",
+							"    pm.expect(responseJson.transactions[0].id).exist;",
+							"    pm.expect(responseJson.transactions[0].amount).exist;",
+							"    pm.expect(responseJson.transactions[0].created_at).exist;",
+							"    pm.expect(responseJson.transactions[0].reference_no).exist;",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Mahdi\",\n    \"surname\": \"Sharifi\",\n    \"created_at\": \"2022-04-30T04:22:26.543+00:00\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/v1/customers",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"customers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET all account",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"  pm.response.to.have.status(200);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Initial-Credit",
+						"value": "2",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8080/v1/accounts",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"accounts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET all customers",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"  pm.response.to.have.status(200);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Initial-Credit",
+						"value": "2",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8080/v1/customers",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"customers"
 					]
 				}
 			},

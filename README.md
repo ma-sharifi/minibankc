@@ -1,14 +1,31 @@
 **## Mini BankC Assessment**
-This is an assessment about a mini bank.
+This is an assessment about handling a mini bank.
 
 # Introduction
 Welcome to Mini BankC.  
+The main features of this mini bank:
+1. Open an account for existing customer (specified by customer id) and add transaction if initial credit be more than zero.
+2. Get customer information by passing customer id to it.
+3. Test Coverage is about 70%
 
+Also it has:
+A. Create a customer
+B. Get list of all customers/accounts
+C. Get an account by id
+D. Expose a ping for considering service is up.
+
+About This software:
 1.  A Spring Boot server that is deployed as Docker container and can handle a mini bank.
-2.  There are tow main endpoints for manipulating data.
+2.  There are tow main endpoints for manipulating data /v1/customers and /v1/accounts.
 3.  A H2 database used to hold the data in RAM.
+4.  Used https://start.jhipster.tech/jdl-studio/ for design and extract JPA entities and create some codes with jhipster-jdl.
 
-Documentation is: http://localhost:8080/swagger-ui/index.html
+# Documentation
+###Swagger: 
+    documentation is: http://localhost:8080/swagger-ui/index.html
+###Postman: 
+    You can find Postman file in postman folder in root of project.
+    For each API call, was written test with Postman.
 
 0- Ping service
 GET http://localhost:8080/v1/customers/ping
@@ -24,11 +41,16 @@ GET http://localhost:8080/v1/customers/1
 GET http://localhost:8080/v1/accounts/2
 This file will be completed...
 
-
 ## Initial Configuration
 1.	Apache Maven (http://maven.apache.org)  This code have been compiled with Java version 11.
 2.	Git Client (http://git-scm.com)
 3.  Docker(https://www.docker.com/products/docker-desktop)
+
+## MiniBankC Database Diagram
+![](https://s22.picofile.com/file/8449605868/db_diagram.jpg "")
+
+# The build command
+Will execute the [Spotify dockerfile plugin](https://github.com/spotify/dockerfile-maven) defined in the pom.xml file.  
 
 ## How To Use
 To clone and run this application, you'll need [Git](https://git-scm.com), [Maven](https://maven.apache.org/), [Java 11](https://www.oracle.com/technetwork/java/javase/downloads/jdk11-downloads-5066655.html). From your command line:
@@ -68,10 +90,6 @@ For CD you must do some steps:
         Name: DOCKER_PASSWORD , Value: ***. because *** is my docker hub password.
 This video can help: https://www.youtube.com/watch?v=R8_veQiYBjI
 ```
-#POSTMAN
-You can find Postman file in postman folder in root of project.
-For each API call wrote test with Postman.
-
 ## Contact
 I'd like you to send me an email on <mahdi.elu@gmail.com> about anything you'd want to say about this software.
 
