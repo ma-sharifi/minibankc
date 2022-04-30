@@ -12,6 +12,8 @@ import com.example.minibankc.repository.AccountTransactionRepository;
 import com.example.minibankc.repository.CustomerRepository;
 import com.example.minibankc.service.AccountService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,6 +49,12 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
+    public Page<AccountDto> findAll(Pageable pageable) {
+        log.debug("Request to get all Account");
+        return accountRepository.findAll(pageable).map(accountMapper::toDto);
+    }
+
+    @Override
     public AccountDto openAccountForExistingCustomer(long customerId,long initialCredit) throws CustomerNotFoundException{
         log.debug("Request to open an Account. If initialCredit>0 then a transaction will be added : {}", initialCredit);
         Optional<Customer> customerOptional= customerRepository.findById(customerId);
@@ -65,4 +73,5 @@ public class AccountServiceImpl implements AccountService {
         }else
             throw new CustomerNotFoundException(customerId);
     }
+
 }

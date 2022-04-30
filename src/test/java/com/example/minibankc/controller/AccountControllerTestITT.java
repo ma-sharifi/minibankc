@@ -5,47 +5,29 @@ import com.example.minibankc.dto.AccountDto;
 import com.example.minibankc.entity.Account;
 import com.example.minibankc.entity.Customer;
 import com.example.minibankc.exception.BadRequestAlertException;
+import com.example.minibankc.exception.CustomerNotFoundException;
 import com.example.minibankc.mapper.AccountMapper;
+import com.example.minibankc.mapper.CustomerMapper;
 import com.example.minibankc.repository.AccountRepository;
 import com.example.minibankc.repository.CustomerRepository;
-import com.example.minibankc.service.impl.AccountServiceImpl;
-import com.example.minibankc.util.TestUtil;
-import org.assertj.core.api.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentMatchers;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockServletContext;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.context.WebApplicationContext;
 
 import javax.persistence.EntityManager;
-import javax.servlet.ServletContext;
-import java.math.BigDecimal;
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
-import java.util.Optional;
-import java.util.Random;
-import java.util.concurrent.atomic.AtomicLong;
 
-import static com.example.minibankc.util.TestUtil.sameNumber;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.test.web.client.match.MockRestRequestMatchers.jsonPath;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -56,6 +38,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * @since 4/29/22
  * IT without explicitly starting a Servlet container
  */
+
 /**
  * Integration tests for the {@link AccountController} REST controller.
  */
@@ -63,18 +46,24 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 class AccountControllerTestITT {
 
-    private static final Long DEFAULT_BALANCE = 1L;
-
-    private static final Instant DEFAULT_CREATED_AT = Instant.ofEpochMilli(0L);
+    private static final Long DEFAULT_BALANCE = 5L;
+    private static final Long DEFAULT_BALANCE_LESS_THAN_ZERO = -6L;
 
     private static final String ENTITY_API_URL = "/v1/accounts";
+    private static final String ENTITY_API_URL_FOR_OPEN_ACCOUNT = "/v1/customers";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
 
     @Autowired
     private AccountRepository accountsRepository;
 
     @Autowired
+    private CustomerRepository customerRepository;
+
+    @Autowired
     private AccountMapper accountsMapper;
+
+    @Autowired
+    private CustomerMapper customerMapper;
 
     @Autowired
     private EntityManager em;
@@ -86,7 +75,7 @@ class AccountControllerTestITT {
 
     /**
      * Create an entity for this test.
-     *
+     * <p>
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
@@ -103,13 +92,23 @@ class AccountControllerTestITT {
 
     @Test
     @Transactional
-    void createAccounts() throws Exception {
+    void openAccountForExistingCustomerWithInitialCreditMoreThanZero() throws Exception {
+        Customer customer = new Customer();
+        customer.setName("Mahdi");
+        customer.setSurname("Sharifi");
+
+        customerRepository.saveAndFlush(customer); //Save Customer;
+
+        int accountCounter = customer.getAccounts().size();
+
         int databaseSizeBeforeCreate = accountsRepository.findAll().size();
-        // Create the Accounts
-        AccountDto accountsDto = accountsMapper.toDto(account);
+        // Open an Account for existing customer
         restAccountsMockMvc
-                .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(accountsDto)))
-                .andExpect(status().isCreated());
+                .perform(
+                        post(ENTITY_API_URL_FOR_OPEN_ACCOUNT + "/" + customer.getId() + "/accounts")
+                                .header("Initial-Credit", DEFAULT_BALANCE))
+                .andExpect(status().isCreated())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.balance").value(DEFAULT_BALANCE));
 
         // Validate the Accounts in the database
         List<Account> accountsList = accountsRepository.findAll();
@@ -117,6 +116,39 @@ class AccountControllerTestITT {
         Account testAccount = accountsList.get(accountsList.size() - 1);
         assertThat(testAccount.getBalance()).isEqualByComparingTo(DEFAULT_BALANCE);
     }
+
+    @Test
+    @Transactional
+    void openAccountForNonExistingCustomer() throws Exception {
+        restAccountsMockMvc
+                .perform(
+                        post(ENTITY_API_URL_FOR_OPEN_ACCOUNT + "/" + Integer.MAX_VALUE + "/accounts")
+                                .header("Initial-Credit", DEFAULT_BALANCE))
+                .andExpect(status().isNotFound())
+                .andExpect(result -> assertTrue(result.getResolvedException().getMessage().contains("Could not find customer with id:")))
+                .andExpect(result -> assertTrue(result.getResolvedException() instanceof CustomerNotFoundException));
+
+    }
+
+    @Test
+    @Transactional
+    void openAccountForExistingCustomerWithInitialCreditLessThanZero() throws Exception {
+        Customer customer = new Customer();
+        customer.setName("Mahdi");
+        customer.setSurname("Sharifi");
+
+        customerRepository.saveAndFlush(customer); //Save Customer;
+
+        restAccountsMockMvc
+                .perform(
+                        post(ENTITY_API_URL_FOR_OPEN_ACCOUNT + "/" + customer.getId() + "/accounts")
+                                .header("Initial-Credit", DEFAULT_BALANCE_LESS_THAN_ZERO))
+                .andExpect(status().isBadRequest())
+                .andExpect(result -> assertEquals("initial Credit can not be less than zero!", result.getResolvedException().getMessage()))
+                .andExpect(result -> assertTrue(result.getResolvedException() instanceof BadRequestAlertException));
+
+    }
+
 
     @Test
     @Transactional
@@ -128,7 +160,7 @@ class AccountControllerTestITT {
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restAccountsMockMvc
-                .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(accountsDto)))
+                .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(accountsDto.toJSON()))
                 .andExpect(status().isBadRequest())
                 .andExpect(result -> assertEquals("A new customer cannot already have an ID", result.getResolvedException().getMessage()))
                 .andExpect(result -> assertTrue(result.getResolvedException() instanceof BadRequestAlertException));
@@ -145,7 +177,7 @@ class AccountControllerTestITT {
         AccountDto accountsDto = accountsMapper.toDto(account);
 
         restAccountsMockMvc
-                .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(accountsDto)))
+                .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(accountsDto.toJSON()))
                 .andExpect(status().isBadRequest());
 
         List<Account> accountsList = accountsRepository.findAll();
@@ -160,7 +192,7 @@ class AccountControllerTestITT {
 
         // Get all the accountsList
         restAccountsMockMvc
-                .perform(get(ENTITY_API_URL + "?sort=id,desc"))
+                .perform(get(ENTITY_API_URL))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.[*].id").value(hasItem(account.getId().intValue())))

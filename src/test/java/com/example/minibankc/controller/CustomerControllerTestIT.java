@@ -5,10 +5,8 @@ import com.example.minibankc.IntegrationTest;
 import com.example.minibankc.dto.CustomerDto;
 import com.example.minibankc.entity.Customer;
 import com.example.minibankc.exception.BadRequestAlertException;
-import com.example.minibankc.exception.CustomerNotFoundException;
 import com.example.minibankc.mapper.CustomerMapper;
 import com.example.minibankc.repository.CustomerRepository;
-import com.example.minibankc.util.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,15 +16,12 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
-import java.time.Instant;
-import java.util.Date;
 import java.util.List;
-import java.util.Random;
-import java.util.concurrent.atomic.AtomicLong;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -74,19 +69,6 @@ class CustomerControllerTestIT {
         return customer;
     }
 
-    /**
-     * Create an updated entity for this test.
-     * <p>
-     * This is a static method, as tests for other entities might also need it,
-     * if they test an entity which requires the current entity.
-     */
-    public static Customer createUpdatedEntity(EntityManager em) {
-        Customer customer = new Customer();
-        customer.setName(UPDATED_NAME);
-        customer.setSurname(UPDATED_SURNAME);
-        return customer;
-    }
-
     @BeforeEach
     public void initTest() {
         customer = createEntity(em);
@@ -99,7 +81,7 @@ class CustomerControllerTestIT {
         // Create the Customer
         CustomerDto customerDto = customerMapper.toDto(customer);
         restCustomerMockMvc
-                .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(customerDto)))
+                .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(customerDto.toJSON()))
                 .andExpect(status().isCreated());
 
         // Validate the Customer in the database
@@ -115,14 +97,14 @@ class CustomerControllerTestIT {
         // Create the Customer with an existing ID
         customer.setId(1L);
         CustomerDto customerDto = customerMapper.toDto(customer);
-            // An entity with an existing ID cannot be created, so this API call must fail
-            restCustomerMockMvc
-                    .perform(post(ENTITY_API_URL)
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(customerDto.toJSON()))
-                    .andExpect(status().isBadRequest())
-                    .andExpect(result -> assertEquals("A new customer cannot already have an ID", result.getResolvedException().getMessage()))
-                    .andExpect(result -> assertTrue(result.getResolvedException() instanceof BadRequestAlertException));
+        // An entity with an existing ID cannot be created, so this API call must fail
+        restCustomerMockMvc
+                .perform(post(ENTITY_API_URL)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(customerDto.toJSON()))
+                .andExpect(status().isBadRequest())
+                .andExpect(result -> assertEquals("A new customer cannot already have an ID", result.getResolvedException().getMessage()))
+                .andExpect(result -> assertTrue(result.getResolvedException() instanceof BadRequestAlertException));
     }
 
     @Test
