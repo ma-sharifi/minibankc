@@ -144,9 +144,7 @@ class AccountControllerTestITT {
                 .andExpect(status().isBadRequest())
 //                .andExpect(result -> assertEquals("initial Credit can not be less than zero!", result.getResolvedException().getMessage()))
                 .andExpect(result -> assertTrue(result.getResolvedException() instanceof BadRequestAlertException));
-
     }
-
 
     @Test
     @Transactional

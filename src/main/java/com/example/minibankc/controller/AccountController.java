@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.bind.DefaultValue;
 import org.springframework.context.MessageSource;
+import org.springframework.context.annotation.Description;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -57,6 +58,7 @@ public class AccountController {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the accountDto, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/accounts/{account-id}")
+    @Description("Get Account details")
     public ResponseEntity<AccountDto> getAccount(@PathVariable("account-id") Long id
             ,@RequestParam(required = false , defaultValue = "en") String lang) throws AccountNotFoundException {
         log.debug("REST request to get Account : {}", id);

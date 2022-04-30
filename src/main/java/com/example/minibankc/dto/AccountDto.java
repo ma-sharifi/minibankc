@@ -34,9 +34,13 @@ public class AccountDto extends BaseDto {
 
     @Override
     public String toString() {
-        return "AccountDto{" +
+        StringBuilder result = new StringBuilder("AccountDto{" +
                 "id=" + getId() +
-                " ;balance=" + getBalance() +
-                '}';
+                " ;balance=" + getBalance());
+        if (accountTransactions != null)
+            result.append(" ;transaction.size=").append(accountTransactions.size());
+        result.append('}');
+
+        return result.toString();
     }
 }

@@ -1,19 +1,35 @@
 <html xmlns:th="https://thymeleaf.org">
-<table>
-     <tr th:each="customer: ${customer}">
-        <td th:text="${customer.name}">Name</td>
-        <td th:text="${customer.surname}">Surname</td>
-        <td th:text="${customer.accounts.size}">size</td>
-    </tr>
 
-</table>
-<table>
-    <tr th:each="account: ${customer.accounts}">
-        <td th:text="${account.balance}">Name</td>
-        <td th:text="${account.accountTransactions.size}">size</td>
-<!--        <tr th:each="accountTransaction: ${account.accountTransactions}">-->
-<!--           <td th:text="${accountTransaction.amount}">amount</td>-->
-<!--        </tr>-->
-    </tr>
-</table>
+<body>
+<div class="container">
+    <h1>Customer: </h1>
+    <td th:text="${customer.id}">Id</td>
+    <td th:text="${customer.name}">Name</td>
+    <td th:text="${customer.surname}">Surname</td>
+    <div th:if="${not #lists.isEmpty(accounts)}">
+        <table class="table table-striped" style="width: 100%">
+            <tbody>
+            <tr th:each="account : ${accounts}">
+                <h2>Account: </h2>
+                <p>#Account.ID: [(${account.id})] ;Account.Balance: [(${account.balance})] ;Transactions.Size:
+                    [(${account.accountTransactions.size})] </p>
+                <h3>Transaction: </h3>
+                <div th:if="${not #lists.isEmpty(account.accountTransactions)}">
+                    <table id="class2" class="table table-striped" style="width: 100%">
+                        <tbody>
+                        <tr th:each="tran : ${account.accountTransactions}">
+                            <p>Transactions.ID: [(${tran.id})] ;Transactions.Amount: [(${tran.amount})]
+                                ;Transactions.NewBalance: [(${tran.newBalance})] </p>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+</body>
+
 </html>
