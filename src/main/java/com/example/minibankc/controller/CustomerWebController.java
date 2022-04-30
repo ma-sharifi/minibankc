@@ -31,7 +31,7 @@ public class CustomerWebController {
     @RequestMapping("/customers/{customer-id}")
     public String getCustomer(Model model, @PathVariable("customer-id") Long customerId
             ,@RequestParam(required = false , defaultValue = "en") String lang){
-        log.debug("#web request for customers with id: "+customerId+" ;lang: "+lang);
+        log.debug("#Web request for get customer with id: "+customerId+" ;lang: "+lang);
         CustomerDto customerDto= customerService.findOne(customerId,lang);
         model.addAttribute("customer",customerDto);
         model.addAttribute("accounts",customerDto.getAccounts());

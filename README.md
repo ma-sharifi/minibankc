@@ -3,22 +3,25 @@ This is an assessment about handling a mini bank.
 
 # Introduction
 Welcome to Mini BankC.  
-The main features of this mini bank:
+###The main features of this mini bank:
 1. Open an account for existing customer (specified by customer id) and add transaction if initial credit be more than zero.
 2. Get customer information by passing customer id to it.
 
-Also it has:
-A. Create a customer
-B. Get list of all customers/accounts
-C. Get an account by id
-D. Expose a ping for considering service is up.
-E. 2 language support (nl, en) as a query param. ?lang=en OR lang=nl
+###It also has:
+1. Create a customer
+2. Get list of all customers/accounts
+3. Get an account by id
+4. Expose a ping for considering service is up.
+5. 2 language support (nl, en) as a query param. ?lang=en OR lang=nl
 
-About This software:
+###About This software:
 1.  A Spring Boot server that is deployed as Docker container and can handle a mini bank.
 2.  There are tow main endpoints for manipulating data /v1/customers and /v1/accounts.
-3.  A H2 database used to hold the data in RAM.
+3.  A H2 database used to hold the data in RAM. It has entities. Customer ,Account ,Account Transaction. 
+    Each customer can have multiple accounts , and each account can have multiple accountTransactions.
 4.  Used https://start.jhipster.tech/jdl-studio/ for design and extract JPA entities and create some codes with jhipster-jdl.
+### MiniBankC Database Diagram
+![](https://s22.picofile.com/file/8449605868/db_diagram.jpg "")
 
 # Documentation
 ###Swagger: 
@@ -45,9 +48,6 @@ This file will be completed...
 1.	Apache Maven (http://maven.apache.org)  This code have been compiled with Java version 11.
 2.	Git Client (http://git-scm.com)
 3.  Docker(https://www.docker.com/products/docker-desktop)
-
-## MiniBankC Database Diagram
-![](https://s22.picofile.com/file/8449605868/db_diagram.jpg "")
 
 # The build command
 Will execute the [Spotify dockerfile plugin](https://github.com/spotify/dockerfile-maven) defined in the pom.xml file.  
@@ -91,7 +91,7 @@ For CD you must do some steps:
 This video can help: https://www.youtube.com/watch?v=R8_veQiYBjI
 ```
 ## Simple UI
-A simple ui provided at this address: /v1/ui/customers/1?lang=nl
+A simple UI provided at this address: /v1/ui/customers/1?lang=nl
 ## Contact
 I'd like you to send me an email on <mahdi.elu@gmail.com> about anything you'd want to say about this software.
 
