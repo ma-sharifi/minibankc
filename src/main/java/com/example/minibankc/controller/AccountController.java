@@ -1,11 +1,18 @@
 package com.example.minibankc.controller;
 
 import com.example.minibankc.dto.AccountDto;
+import com.example.minibankc.dto.CustomerDto;
 import com.example.minibankc.exception.AccountNotFoundException;
 import com.example.minibankc.exception.BadRequestAlertException;
 import com.example.minibankc.exception.CustomerNotFoundException;
 import com.example.minibankc.service.AccountService;
 import com.example.minibankc.util.PaginationUtil;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.extern.slf4j.Slf4j;
 import org.springdoc.api.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,32 +59,27 @@ public class AccountController {
     }
 
     /**
-     * {@code GET  /account/:id} : get the "id" account.
-     *
-     * @param id the id of the accountDto to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the accountDto, or with status {@code 404 (Not Found)}.
-     */
-    @GetMapping("/accounts/{account-id}")
-    @Description("Get Account details")
-    public ResponseEntity<AccountDto> getAccount(@PathVariable("account-id") Long id
-            ,@RequestParam(required = false , defaultValue = "en") String lang) throws AccountNotFoundException {
-        log.debug("REST request to get Account : {}", id);
-        LocaleContextHolder.setDefaultLocale(Locale.forLanguageTag("nl"));
-        return ResponseEntity.ok().body(accountService.findOne(id,lang));
-    }
-
-    /**
      * create and account for customer if customer exist.
-     * if blanace is grater than 0 a transaction create as well.
+     * if balance is grater than 0 a transaction create as well.
      *
      * @param customerId
      * @param initialCredit
      * @return
      */
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Created an account for current customer",
+                    content = { @Content(mediaType = "application/json", schema = @Schema(implementation = AccountDto.class)) }),
+            @ApiResponse(responseCode = "400", description = "Invalid Request. If initialCredit be less than zero it throws 400.", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Customer not found for creating an account for it", content = @Content) })
+    @Operation(summary = "Open an account for existing customer")
     @PostMapping("/customers/{customer-id}/accounts")
-    public ResponseEntity<AccountDto> openAccountForExistingCustomer(@PathVariable("customer-id") long customerId
-            , @RequestHeader("Initial-Credit") long initialCredit
-            ,@DefaultValue("en")  @RequestParam(required = false) String lang
+    public ResponseEntity<AccountDto> openAccountForExistingCustomer(
+            @Parameter(description = "Id of customer to open an account for it")
+            @PathVariable("customer-id") long customerId
+            ,@Parameter(description = "Initial-Credit must be greater than zero.")
+            @RequestHeader("Initial-Credit") long initialCredit
+            ,@Parameter(description = "Lang for changing message language. lang[en/nl]")
+            @RequestParam(required = false , defaultValue = "en") String lang
 
     ) throws CustomerNotFoundException {
         log.debug("REST request to create account for customer : {}", customerId);
@@ -88,16 +90,32 @@ public class AccountController {
         URI location = URI.create("http://localhost:" + serverPort + "/v1/accounts/" + accountDto.getId());
         return ResponseEntity.created(location).body(accountDto);
     }
+    //*****************This part there was not at assignment, but for manipulating data we need them.*********************
 
+    /**
+     * {@code GET  /account/:id} : get the "id" account.
+     *
+     * @param id the id of the accountDto to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the accountDto, or with status {@code 404 (Not Found)}.
+     */
+    @GetMapping("/accounts/{account-id}")
+    @Operation(summary = "Get Account details")
+    public ResponseEntity<AccountDto> getAccount(@PathVariable("account-id") Long id
+            ,@RequestParam(required = false , defaultValue = "en") String lang) throws AccountNotFoundException {
+        log.debug("REST request to get Account : {}", id);
+        LocaleContextHolder.setDefaultLocale(Locale.forLanguageTag("nl"));
+        return ResponseEntity.ok().body(accountService.findOne(id,lang));
+    }
     /**
      * {@code GET  /account} : get all the account.
      *
      * @param pageable the pagination information.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of account in body.
      */
+    @Operation(summary = "Get all accounts")
     @GetMapping("/accounts")
     public ResponseEntity<List<AccountDto>> getAllAccounts(@ParameterObject Pageable pageable
-            ,@DefaultValue("en")  @RequestParam(required = false) String lang
+            ,@RequestParam(required = false , defaultValue = "en") String lang
     ) {
         log.debug("REST request to get a page of Accounts");
         Page<AccountDto> page = accountService.findAll(pageable);

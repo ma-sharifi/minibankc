@@ -18,7 +18,7 @@
                     <table id="class2" class="table table-striped" style="width: 100%">
                         <tbody>
                         <tr th:each="tran : ${account.accountTransactions}">
-                            <p>Transactions.ID: [(${tran.id})] ;Transactions.Amount: [(${tran.amount})]
+                            <p>For Account.ID:[(${account.id})] -> Transactions.ID: [(${tran.id})] ;Transactions.Amount: [(${tran.amount})]
                                 ;Transactions.NewBalance: [(${tran.newBalance})] </p>
                         </tr>
                         </tbody>

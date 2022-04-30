@@ -44,7 +44,7 @@
 					},
 					{
 						"key": "Initial-Credit",
-						"value": "1",
+						"value": "-1",
 						"type": "text"
 					}
 				],
@@ -53,7 +53,7 @@
 					"raw": "5"
 				},
 				"url": {
-					"raw": "http://localhost:8080/v1/customers/1/accounts",
+					"raw": "http://localhost:8080/v1/customers/1/accounts?lang=en",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -64,6 +64,12 @@
 						"customers",
 						"1",
 						"accounts"
+					],
+					"query": [
+						{
+							"key": "lang",
+							"value": "en"
+						}
 					]
 				}
 			},
@@ -212,7 +218,7 @@
 					"raw": "5"
 				},
 				"url": {
-					"raw": "http://localhost:8080/v1/accounts/1",
+					"raw": "http://localhost:8080/v1/accounts/111?lang=en",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -221,7 +227,13 @@
 					"path": [
 						"v1",
 						"accounts",
-						"1"
+						"111"
+					],
+					"query": [
+						{
+							"key": "lang",
+							"value": "en"
+						}
 					]
 				}
 			},

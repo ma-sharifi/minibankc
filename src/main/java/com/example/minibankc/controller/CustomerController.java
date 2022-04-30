@@ -6,6 +6,12 @@ import com.example.minibankc.exception.CustomerNotFoundException;
 import com.example.minibankc.service.CustomerService;
 import com.example.minibankc.util.HeaderUtil;
 import com.example.minibankc.util.PaginationUtil;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -53,25 +59,34 @@ public class CustomerController {
         this.customerService = customerService;
     }
 
-    @GetMapping("ping")
-    public ResponseEntity<String> pong(){
-        return ResponseEntity.ok().body("pong");
-    }
-
     /**
      * {@code GET  /customers/:customer-id} : get the "customer-id" customer.
      *
      * @param customerId the id of the customerDto to retrieve.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the customerDto, or with status {@code 404 (Not Found)}.
      */
-
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Found the CustomerDto",
+                    content = { @Content(mediaType = "application/json", schema = @Schema(implementation = CustomerDto.class)) }),
+            @ApiResponse(responseCode = "400", description = "Invalid Request.", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Customer not found", content = @Content) })
+    @Operation(summary = "Get a customer")
     @GetMapping("/customers/{customer-id}")
-    public ResponseEntity<CustomerDto> getCustomerById(@PathVariable("customer-id") long customerId
-            ,@RequestParam(required = false , defaultValue = "en") String lang) throws CustomerNotFoundException {
+    public ResponseEntity<CustomerDto> getCustomerById(
+            @Parameter(description = "Id of customer to be searched")
+            @PathVariable("customer-id") long customerId
+            ,@Parameter(description = "Lang for changing message language. lang[en/nl]")
+              @RequestParam(required = false , defaultValue = "en") String lang) throws CustomerNotFoundException {
         return ResponseEntity.ok().body(customerService.findOne(customerId,lang));
     }
 
     //*****************This part there was not at assignment, but for manipulating data we need them.*********************
+    @Operation(summary = "Ping return pong for checking service")
+    @GetMapping("ping")
+    public ResponseEntity<String> pong(){
+        return ResponseEntity.ok().body("pong");
+    }
+
     /**
      * {@code POST  /customers} : Create a new customer.
      *
@@ -79,6 +94,7 @@ public class CustomerController {
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new customerDto, or with status {@code 400 (Bad Request)} if the customer has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
+    @Operation(summary = "Create a new customer")
     @PostMapping("/customers")
     public ResponseEntity<CustomerDto> createCustomer(@Valid @RequestBody CustomerDto customerDto
             ,@RequestParam(required = false , defaultValue = "en") String lang) throws URISyntaxException {
@@ -100,6 +116,7 @@ public class CustomerController {
      * @param pageable the pagination information.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of customers in body.
      */
+    @Operation(summary = "Get all customers")
     @GetMapping("/customers")
     public ResponseEntity<List<CustomerDto>> getAllCustomers(@org.springdoc.api.annotations.ParameterObject Pageable pageable) {
         log.debug("REST request to get a page of Customers");
