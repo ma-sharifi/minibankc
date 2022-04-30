@@ -84,13 +84,13 @@ class CustomerServiceTest {
     @Test
     void WhenCustomerNotFound_ThrowsCustomerNotFoundException() {
         Throwable exception = assertThrows(CustomerNotFoundException.class, () ->
-                customerService.getCustomerInfo(100000)
+                customerService.findOne(100000L)
         );
         assertEquals("Could not find customer with id: 100000", exception.getMessage());
     }
     @Test
     void WhenCustomerIs1ThenReturnCustomerInfo(){
-        CustomerDto customerDto= customerService.getCustomerInfo(1);
+        CustomerDto customerDto= customerService.findOne(1L);
         assertEquals(customer.getName(), customerDto.getName());
         assertEquals(customer.getSurname(), customerDto.getSurname());
         assertEquals(customer.getAccounts().size(), customerDto.getAccounts().size());

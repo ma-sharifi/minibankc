@@ -24,7 +24,7 @@ public class CustomerWebController {
 
     @RequestMapping("/v1/c")
     public String getCustomer(Model model){
-        CustomerDto customerDto= customerService.getCustomerInfo(1);
+        CustomerDto customerDto= customerService.findOne(1L);
         model.addAttribute("customer",customerDto);
         return "customer/list";
     }

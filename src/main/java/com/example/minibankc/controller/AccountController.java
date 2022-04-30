@@ -28,6 +28,12 @@ public class AccountController {
     @Value("${server.port}")
     private int serverPort;
 
+    @Value("${spring.application.name}")
+    private String applicationName;
+
+
+    private static final String ENTITY_NAME = "account";
+
     private final AccountService accountService;
 
     public AccountController(AccountService accountService) {

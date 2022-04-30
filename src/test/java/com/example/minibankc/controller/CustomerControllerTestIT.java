@@ -1,42 +1,36 @@
 package com.example.minibankc.controller;
 
-import com.example.minibankc.dto.AccountDto;
+
+import com.example.minibankc.IntegrationTest;
 import com.example.minibankc.dto.CustomerDto;
-import com.example.minibankc.entity.Account;
 import com.example.minibankc.entity.Customer;
+import com.example.minibankc.exception.BadRequestAlertException;
 import com.example.minibankc.exception.CustomerNotFoundException;
-import com.example.minibankc.mapper.AccountMapper;
 import com.example.minibankc.mapper.CustomerMapper;
-import com.example.minibankc.repository.AccountRepository;
 import com.example.minibankc.repository.CustomerRepository;
-import com.example.minibankc.service.impl.AccountServiceImpl;
-import com.example.minibankc.service.impl.CustomerServiceImpl;
 import com.example.minibankc.util.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentMatchers;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.mock.mockito.MockReset;
-import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import java.time.Instant;
+import java.util.Date;
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.Random;
+import java.util.concurrent.atomic.AtomicLong;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasItem;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
 
 /**
  * @author Mahdi Sharifi
@@ -45,64 +39,129 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * @since 4/29/22
  * IT without explicitly starting a Servlet container
  */
+@IntegrationTest
 @AutoConfigureMockMvc
 class CustomerControllerTestIT {
 
-    @SpyBean
-    CustomerServiceImpl customerService;
-    @Mock
-    CustomerRepository customerRepository;
-    @Mock
-    CustomerMapper customerMapper;
+    private static final String DEFAULT_NAME = "AAAAAAAAAA";
+    private static final String UPDATED_NAME = "BBBBBBBBBB";
+    private static final String DEFAULT_SURNAME = "AAAAAAAAAA";
+    private static final String UPDATED_SURNAME = "BBBBBBBBBB";
+    private static final String ENTITY_API_URL = "/v1/customers";
+    private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
+
 
     @Autowired
-    MockMvc mockMvc;////It encapsulates all web application beans and makes them available for testing.
+    private CustomerRepository customerRepository;
+    @Autowired
+    private CustomerMapper customerMapper;
+    @Autowired
+    private EntityManager em;
+    @Autowired
+    private MockMvc restCustomerMockMvc;
+    private Customer customer;
 
-    Long initialCredit = 10L;
-
-    @BeforeEach // we don't have to initialize it inside every test.
-    void setUp() {
-        MockitoAnnotations.initMocks(this);
-
-        //Given
-        Long id = 10L;
+    /**
+     * Create an entity for this test.
+     * <p>
+     * This is a static method, as tests for other entities might also need it,
+     * if they test an entity which requires the current entity.
+     */
+    public static Customer createEntity(EntityManager em) {
         Customer customer = new Customer();
-        customer.setName("Mahdi");
-        customer.setSurname("Sharifi");
+        customer.setName(DEFAULT_NAME);
+        customer.setSurname(DEFAULT_SURNAME);
+        return customer;
+    }
 
+    /**
+     * Create an updated entity for this test.
+     * <p>
+     * This is a static method, as tests for other entities might also need it,
+     * if they test an entity which requires the current entity.
+     */
+    public static Customer createUpdatedEntity(EntityManager em) {
+        Customer customer = new Customer();
+        customer.setName(UPDATED_NAME);
+        customer.setSurname(UPDATED_SURNAME);
+        return customer;
+    }
 
-        Account account = new Account();
-        account.setCustomer(customer);
-        account.setBalance(initialCredit);
-        account.setId(1L);
-        customer.setAccounts(Set.of(account));
-
-        AccountDto accountDto = new AccountDto();
-        accountDto.setBalance(initialCredit);
-        accountDto.setId(1L);
-
-        CustomerDto dto=new CustomerDto();
-        dto.setSurname("Sharifi");
-        dto.setName("Mahdi");
-        dto.setAccounts(Set.of(accountDto));
-
-        customerService = new CustomerServiceImpl(customerRepository, customerMapper);
-        final CustomerController controller = new CustomerController(customerService);
-        this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
-
-        //when
-        Mockito.when(customerMapper.toDto(ArgumentMatchers.any(Customer.class))).thenReturn(dto);
-        Mockito.when(customerRepository.findById(1L)).thenReturn(Optional.of(customer));
-        Mockito.when(customerService.getCustomerInfo(1)).thenReturn(dto);
+    @BeforeEach
+    public void initTest() {
+        customer = createEntity(em);
     }
 
     @Test
-    void openAccountWhenCustomerExist() throws Exception {
+    @Transactional
+    void createCustomer() throws Exception {
+        int databaseSizeBeforeCreate = customerRepository.findAll().size();
+        // Create the Customer
+        CustomerDto customerDto = customerMapper.toDto(customer);
+        restCustomerMockMvc
+                .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(customerDto)))
+                .andExpect(status().isCreated());
 
-        //Then
-        mockMvc.perform(get("/v1/customers/{customer-id}", "1")
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
+        // Validate the Customer in the database
+        List<Customer> customerList = customerRepository.findAll();
+        assertThat(customerList).hasSize(databaseSizeBeforeCreate + 1);
+        Customer testCustomer = customerList.get(customerList.size() - 1);
+        assertThat(testCustomer.getName()).isEqualTo(DEFAULT_NAME);
+        assertThat(testCustomer.getSurname()).isEqualTo(DEFAULT_SURNAME);
+    }
+
+    @Test
+    void createCustomerWithExistingId() throws Exception {
+        // Create the Customer with an existing ID
+        customer.setId(1L);
+        CustomerDto customerDto = customerMapper.toDto(customer);
+            // An entity with an existing ID cannot be created, so this API call must fail
+            restCustomerMockMvc
+                    .perform(post(ENTITY_API_URL)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(customerDto.toJSON()))
+                    .andExpect(status().isBadRequest())
+                    .andExpect(result -> assertEquals("A new customer cannot already have an ID", result.getResolvedException().getMessage()))
+                    .andExpect(result -> assertTrue(result.getResolvedException() instanceof BadRequestAlertException));
+    }
+
+    @Test
+    @Transactional
+    void getAllCustomers() throws Exception {
+        // Initialize the database
+        customerRepository.saveAndFlush(customer);
+
+        // Get all the customerList
+        restCustomerMockMvc
+                .perform(get(ENTITY_API_URL))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(jsonPath("$.[*].id").value(hasItem(customer.getId().intValue())))
+                .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
+                .andExpect(jsonPath("$.[*].surname").value(hasItem(DEFAULT_SURNAME)));
+    }
+
+    @Test
+    @Transactional
+    void getCustomer() throws Exception {
+        // Initialize the database
+        customerRepository.saveAndFlush(customer);
+
+        // Get the customer
+        restCustomerMockMvc
+                .perform(get(ENTITY_API_URL_ID, customer.getId()))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(jsonPath("$.id").value(customer.getId().intValue()))
+                .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
+                .andExpect(jsonPath("$.surname").value(DEFAULT_SURNAME));
+    }
+
+    @Test
+    @Transactional
+    void getNonExistingCustomer() throws Exception {
+        // Get the customer
+        restCustomerMockMvc.perform(get(ENTITY_API_URL_ID, Long.MAX_VALUE)).andExpect(status().isNotFound());
     }
 
 }

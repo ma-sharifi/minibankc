@@ -5,6 +5,7 @@ package com.example.minibankc.util;
  * @version 2022.1.1
  * https://www.linkedin.com/in/mahdisharifi/
  * @since 4/22/22
+ * Extracted from JHipster Code generator
  */
 
 import org.slf4j.Logger;

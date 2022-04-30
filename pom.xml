@@ -102,6 +102,29 @@
 			<artifactId>validation-api</artifactId>
 			<version>2.0.1.Final</version>
 		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.zalando/problem -->
+		<dependency>
+			<groupId>org.zalando</groupId>
+			<artifactId>problem</artifactId>
+			<version>0.27.0</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.zalando/problem-violations -->
+		<dependency>
+			<groupId>org.zalando</groupId>
+			<artifactId>problem-violations</artifactId>
+			<version>0.27.0</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.zalando/problem-spring-web -->
+		<dependency>
+			<groupId>org.zalando</groupId>
+			<artifactId>problem-spring-web</artifactId>
+			<version>0.27.0</version>
+		</dependency>
+
+
 	</dependencies>
 
 	<build>
