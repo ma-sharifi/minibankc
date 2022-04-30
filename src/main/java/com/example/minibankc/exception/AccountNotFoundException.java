@@ -20,10 +20,13 @@ public class AccountNotFoundException extends AbstractThrowableProblem {
 
     private static final String ENTITY_NAME ="account";
 
-    private static final String ERROR_KEY ="accountnofound";
+    private static final String ERROR_KEY ="account.notfound.error.message";
 
     public AccountNotFoundException(Long id) {
         super(ErrorConstants.DEFAULT_TYPE, "Could not find account with id: " + id, Status.NOT_FOUND, null, null, null, getAlertParameters(ENTITY_NAME, ERROR_KEY));
+    }
+    public AccountNotFoundException(String message) {
+        super(ErrorConstants.DEFAULT_TYPE, message, Status.NOT_FOUND, null, null, null, getAlertParameters(ENTITY_NAME, ERROR_KEY));
     }
 
     private static Map<String, Object> getAlertParameters(String entityName, String errorKey) {

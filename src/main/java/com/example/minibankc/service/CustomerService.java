@@ -19,7 +19,7 @@ public interface CustomerService {
      * @param id the id of the entity.
      * @return the entity.
      */
-    CustomerDto findOne(Long id) throws CustomerNotFoundException;
+    CustomerDto findOne(Long id,String lang) throws CustomerNotFoundException;
 
     /**
      * Save a customer.

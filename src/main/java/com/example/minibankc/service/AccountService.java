@@ -14,7 +14,7 @@ import org.springframework.data.domain.Pageable;
  */
 public interface AccountService {
 
-    AccountDto openAccountForExistingCustomer(long customerId, long initialCredit) throws CustomerNotFoundException;
+    AccountDto openAccountForExistingCustomer(long customerId, long initialCredit, String lang) throws CustomerNotFoundException;
 
     /**
      * Get the "id" accounts.
@@ -22,7 +22,7 @@ public interface AccountService {
      * @param id the id of the entity.
      * @return the entity.
      */
-    AccountDto findOne(Long id) throws AccountNotFoundException;
+    AccountDto findOne(Long id, String lang);
 
     /**
      * Get all the accounts.

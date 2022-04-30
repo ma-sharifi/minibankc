@@ -120,7 +120,7 @@ class AccountControllerTestITT {
     void openAccountForNonExistingCustomer() throws Exception {
         restAccountsMockMvc
                 .perform(
-                        post(ENTITY_API_URL_FOR_OPEN_ACCOUNT + "/" + Integer.MAX_VALUE + "/accounts")
+                        post(ENTITY_API_URL_FOR_OPEN_ACCOUNT + "/" + Integer.MAX_VALUE + "/accounts?lang=en")
                                 .header("Initial-Credit", DEFAULT_BALANCE))
                 .andExpect(status().isNotFound())
 //                .andExpect(result -> assertTrue(result.getResolvedException().getMessage().contains("Could not find customer with id:")))
@@ -139,14 +139,12 @@ class AccountControllerTestITT {
 
         restAccountsMockMvc
                 .perform(
-                        post(ENTITY_API_URL_FOR_OPEN_ACCOUNT + "/" + customer.getId() + "/accounts")
+                        post(ENTITY_API_URL_FOR_OPEN_ACCOUNT + "/" + customer.getId() + "/accounts?lang=en")
                                 .header("Initial-Credit", DEFAULT_BALANCE_LESS_THAN_ZERO))
                 .andExpect(status().isBadRequest())
 //                .andExpect(result -> assertEquals("initial Credit can not be less than zero!", result.getResolvedException().getMessage()))
                 .andExpect(result -> assertTrue(result.getResolvedException() instanceof BadRequestAlertException));
-
     }
-
 
     @Test
     @Transactional

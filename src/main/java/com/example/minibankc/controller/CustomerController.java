@@ -6,9 +6,11 @@ import com.example.minibankc.exception.CustomerNotFoundException;
 import com.example.minibankc.service.CustomerService;
 import com.example.minibankc.util.HeaderUtil;
 import com.example.minibankc.util.PaginationUtil;
-import com.example.minibankc.util.ResponseUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.bind.DefaultValue;
+import org.springframework.context.MessageSource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
@@ -17,12 +19,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.Locale;
 
 /**
  * @author Mahdi Sharifi
@@ -37,6 +37,9 @@ public class CustomerController {
 
     @Value("${server.port}")
     private int serverPort;
+
+    @Autowired
+    private MessageSource messages;
 
     private final CustomerService customerService;
 
@@ -63,12 +66,12 @@ public class CustomerController {
      */
 
     @GetMapping("/customers/{customer-id}")
-    public ResponseEntity<CustomerDto> getCustomerById(@PathVariable("customer-id") long customerId) throws CustomerNotFoundException {
-        return ResponseEntity.ok().body(customerService.findOne(customerId));
+    public ResponseEntity<CustomerDto> getCustomerById(@PathVariable("customer-id") long customerId
+            ,@RequestParam(required = false , defaultValue = "en") String lang) throws CustomerNotFoundException {
+        return ResponseEntity.ok().body(customerService.findOne(customerId,lang));
     }
 
     //*****************This part there was not at assignment, but for manipulating data we need them.*********************
-
     /**
      * {@code POST  /customers} : Create a new customer.
      *
@@ -77,11 +80,12 @@ public class CustomerController {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/customers")
-    public ResponseEntity<CustomerDto> createCustomer(@Valid @RequestBody CustomerDto customerDto) throws URISyntaxException {
+    public ResponseEntity<CustomerDto> createCustomer(@Valid @RequestBody CustomerDto customerDto
+            ,@RequestParam(required = false , defaultValue = "en") String lang) throws URISyntaxException {
         if(customerDto==null)  throw new CustomerNotFoundException(0L);
         log.debug("REST request to save Customer : {}", customerDto.toJSON());
         if (customerDto.getId() != null) {
-            throw new BadRequestAlertException("A new customer cannot already have an ID", ENTITY_NAME, "idexists");
+            throw new BadRequestAlertException(String.format(messages.getMessage("customer.alreadyhaveid.error.message", null, new Locale(lang))), ENTITY_NAME, "customer.alreadyhaveid.error.message");
         }
         CustomerDto result = customerService.save(customerDto);
         return ResponseEntity

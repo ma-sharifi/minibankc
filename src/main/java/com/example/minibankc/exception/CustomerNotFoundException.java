@@ -18,11 +18,15 @@ public class CustomerNotFoundException extends AbstractThrowableProblem {
 
     private static final String ENTITY_NAME="customer";
 
-    private static final String ERROR_KEY="customernotfound";
+    private static final String ERROR_KEY="customer.notfound.error.message";
 
     public CustomerNotFoundException(Long id) {
         super(ErrorConstants.DEFAULT_TYPE, "Could not find customer with id: " + id, Status.NOT_FOUND, null, null, null, getAlertParameters(ENTITY_NAME, ERROR_KEY));
     }
+    public CustomerNotFoundException(String message) {
+        super(ErrorConstants.DEFAULT_TYPE, message, Status.NOT_FOUND, null, null, null, getAlertParameters(ENTITY_NAME, ERROR_KEY));
+    }
+
 
     private static Map<String, Object> getAlertParameters(String entityName, String errorKey) {
         Map<String, Object> parameters = new HashMap<>();

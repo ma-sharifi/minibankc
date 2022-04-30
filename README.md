@@ -6,13 +6,13 @@ Welcome to Mini BankC.
 The main features of this mini bank:
 1. Open an account for existing customer (specified by customer id) and add transaction if initial credit be more than zero.
 2. Get customer information by passing customer id to it.
-3. Test Coverage is about 70%
 
 Also it has:
 A. Create a customer
 B. Get list of all customers/accounts
 C. Get an account by id
 D. Expose a ping for considering service is up.
+E. 2 language support (nl, en) as a query param. ?lang=en OR lang=nl
 
 About This software:
 1.  A Spring Boot server that is deployed as Docker container and can handle a mini bank.
@@ -90,6 +90,8 @@ For CD you must do some steps:
         Name: DOCKER_PASSWORD , Value: ***. because *** is my docker hub password.
 This video can help: https://www.youtube.com/watch?v=R8_veQiYBjI
 ```
+## Simple UI
+A simple ui provided at this address: /v1/ui/customers/1?lang=nl
 ## Contact
 I'd like you to send me an email on <mahdi.elu@gmail.com> about anything you'd want to say about this software.
 

@@ -13,12 +13,15 @@ import com.example.minibankc.repository.AccountTransactionRepository;
 import com.example.minibankc.repository.CustomerRepository;
 import com.example.minibankc.service.AccountService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.util.Locale;
 import java.util.Optional;
 
 /**
@@ -32,6 +35,9 @@ import java.util.Optional;
 @Slf4j
 public class AccountServiceImpl implements AccountService {
 
+    @Autowired
+    private MessageSource messages;
+
     private final CustomerRepository customerRepository;
     private final AccountRepository accountRepository;
 
@@ -44,10 +50,11 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public AccountDto findOne(Long id) throws AccountNotFoundException {
+    public AccountDto findOne(Long id, String lang) throws AccountNotFoundException {
         log.debug("Request to get Account : {}", id);
         Optional<Account> accountOptional= accountRepository.findById(id);
-        return accountOptional.map(accountMapper::toDto).orElseThrow(()->new AccountNotFoundException(id));
+        return accountOptional.map(accountMapper::toDto).orElseThrow(()->
+           new AccountNotFoundException(String.format(messages.getMessage("account.notfound.error.message", null, new Locale(lang)),id)));
     }
 
     @Override
@@ -57,7 +64,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public AccountDto openAccountForExistingCustomer(long customerId,long initialCredit) throws CustomerNotFoundException{
+    public AccountDto openAccountForExistingCustomer(long customerId,long initialCredit , String lang) throws CustomerNotFoundException{
         log.debug("Request to open an Account. If initialCredit>0 then a transaction will be added : {}", initialCredit);
         Optional<Customer> customerOptional= customerRepository.findById(customerId);
         if(customerOptional.isPresent()) {
@@ -73,7 +80,8 @@ public class AccountServiceImpl implements AccountService {
             accountRepository.save(account);
             return accountMapper.toDto(account);
         }else
-            throw new CustomerNotFoundException(customerId);
+           throw new CustomerNotFoundException(String.format(messages.getMessage("customer.notfound.error.message", null, new Locale(lang)),customerId));
+
     }
 
 }
