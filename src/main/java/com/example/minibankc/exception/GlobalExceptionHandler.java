@@ -43,13 +43,7 @@ import java.util.stream.Collectors;
 @Slf4j
 public class GlobalExceptionHandler implements ProblemHandling {
 
-    @ExceptionHandler(value = CustomerNotFoundException.class)
-    public ResponseEntity customerNotFoundException(CustomerNotFoundException customerNotFoundException) {
-        log.debug("customerNotFoundException = " + customerNotFoundException);
-        return new ResponseEntity(customerNotFoundException.getMessage(), HttpStatus.NOT_FOUND);
-    }
-
-    //------ From JHipster------
+    //------------- From JHipster------
     private static final String FIELD_ERRORS_KEY = "fieldErrors";
     private static final String MESSAGE_KEY = "message";
     private static final String PATH_KEY = "path";

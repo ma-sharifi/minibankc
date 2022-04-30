@@ -28,7 +28,7 @@ public final class HeaderUtil {
 
         try {
             headers.add("X-" + applicationName + "-params", URLEncoder.encode(param, StandardCharsets.UTF_8.toString()));
-        } catch (UnsupportedEncodingException var5) {
+        } catch (UnsupportedEncodingException ignored) {
         }
 
         return headers;
@@ -36,16 +36,6 @@ public final class HeaderUtil {
 
     public static HttpHeaders createEntityCreationAlert(String applicationName, boolean enableTranslation, String entityName, String param) {
         String message = enableTranslation ? applicationName + "." + entityName + ".created" : "A new " + entityName + " is created with identifier " + param;
-        return createAlert(applicationName, message, param);
-    }
-
-    public static HttpHeaders createEntityUpdateAlert(String applicationName, boolean enableTranslation, String entityName, String param) {
-        String message = enableTranslation ? applicationName + "." + entityName + ".updated" : "A " + entityName + " is updated with identifier " + param;
-        return createAlert(applicationName, message, param);
-    }
-
-    public static HttpHeaders createEntityDeletionAlert(String applicationName, boolean enableTranslation, String entityName, String param) {
-        String message = enableTranslation ? applicationName + "." + entityName + ".deleted" : "A " + entityName + " is deleted with identifier " + param;
         return createAlert(applicationName, message, param);
     }
 

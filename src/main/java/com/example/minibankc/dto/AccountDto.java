@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import javax.validation.constraints.NotNull;
 import java.util.Set;
 
 /**
@@ -25,7 +26,9 @@ import java.util.Set;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class AccountDto extends BaseDto {
 
+    @NotNull(message = "#Balance can not be null")
     private Long balance;
+
     @JsonProperty("transactions")
     private Set<AccountTransactionDto> accountTransactions;
 

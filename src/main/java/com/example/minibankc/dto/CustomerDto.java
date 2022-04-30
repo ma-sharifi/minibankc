@@ -26,10 +26,10 @@ import java.util.Set;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CustomerDto extends BaseDto {
 
-    @Size(min = 2, max = 60)
+    @Size(message = "#Size of name mut be between 2 and 60",min = 2, max = 60)
     private String name;
 
-    @Size(min = 2, max = 60)
+    @Size(message = "#Size of name mut be between 2 and 60",min = 2, max = 60)
     private String surname;
 
     private Set<AccountDto> accounts ;

@@ -2,7 +2,6 @@ package com.example.minibankc.controller;
 
 import com.example.minibankc.dto.CustomerDto;
 import com.example.minibankc.service.CustomerService;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
