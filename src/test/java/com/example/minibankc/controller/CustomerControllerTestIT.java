@@ -12,6 +12,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.context.MessageSource;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -48,6 +49,8 @@ class CustomerControllerTestIT {
     private static final String ENTITY_API_URL = "/v1/customers";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
 
+    @Autowired
+    private MessageSource messages;
 
     @Autowired
     private CustomerRepository customerRepository;
@@ -106,7 +109,7 @@ class CustomerControllerTestIT {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(customerDto.toJSON()))
                 .andExpect(status().isBadRequest())
-                .andExpect(result -> assertEquals("A new customer cannot already have an ID", result.getResolvedException().getMessage()))
+                .andExpect(result -> assertEquals(messages.getMessage("customer.alreadyhaveid.error.message", null, null), result.getResolvedException().getMessage()))
                 .andExpect(result -> assertTrue(result.getResolvedException() instanceof BadRequestAlertException));
     }
 

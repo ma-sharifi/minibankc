@@ -6,7 +6,6 @@ Welcome to Mini BankC.
 The main features of this mini bank:
 1. Open an account for existing customer (specified by customer id) and add transaction if initial credit be more than zero.
 2. Get customer information by passing customer id to it.
-3. Test Coverage is about 70%
 
 Also it has:
 A. Create a customer

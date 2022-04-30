@@ -3,6 +3,7 @@ package com.example.minibankc.service.impl;
 import com.example.minibankc.dto.CustomerDto;
 import com.example.minibankc.entity.Account;
 import com.example.minibankc.entity.Customer;
+import com.example.minibankc.exception.AccountNotFoundException;
 import com.example.minibankc.exception.CustomerNotFoundException;
 import com.example.minibankc.mapper.CustomerMapper;
 import com.example.minibankc.repository.AccountRepository;
@@ -12,11 +13,13 @@ import com.example.minibankc.service.CustomerService;
 import lombok.extern.flogger.Flogger;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Locale;
 import java.util.Optional;
 
 /**
@@ -30,6 +33,9 @@ import java.util.Optional;
 @Slf4j
 public class CustomerServiceImpl implements CustomerService {
 
+    @Autowired
+    private MessageSource messages;
+
     private final CustomerRepository customerRepository;
 
     private final CustomerMapper customerMapper;
@@ -39,10 +45,11 @@ public class CustomerServiceImpl implements CustomerService {
         this.customerMapper = customerMapper;
     }
     @Override
-    public CustomerDto findOne(Long customerId) throws CustomerNotFoundException {
+    public CustomerDto findOne(Long customerId, String lang) throws CustomerNotFoundException {
         Optional<Customer> customerOptional= customerRepository.findById(customerId);
         customerOptional.ifPresent(customer -> log.debug("#customerOptional with id: "+customerId+" ;"+customer));
-        return customerOptional.map(customerMapper::toDto).orElseThrow(() -> new CustomerNotFoundException(customerId));
+        return customerOptional.map(customerMapper::toDto).orElseThrow(
+                () -> new CustomerNotFoundException(String.format(messages.getMessage("customer.notfound.error.message", null, new Locale(lang)),customerId)));
     }
 
     /**
