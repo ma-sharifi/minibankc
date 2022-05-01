@@ -50,6 +50,7 @@ class AccountControllerTest {
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
         headers.add("Initial-Credit", "5");
+        headers.add("X-Request-Id", "ABCDE");
         HttpEntity<String> entity = new HttpEntity<>("body", headers);
         ResponseEntity<AccountDto> responseEntity = this.restTemplate.exchange(resourceUrl, HttpMethod.POST, entity, AccountDto.class);
         AccountDto accountDto = responseEntity.getBody();

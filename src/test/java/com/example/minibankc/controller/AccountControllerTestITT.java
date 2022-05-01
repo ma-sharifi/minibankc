@@ -48,6 +48,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class AccountControllerTestITT {
 
     private static final Long DEFAULT_BALANCE = 5L;
+    private static final String X_REQUEST_ID = "ABCDE";
     private static final Long DEFAULT_BALANCE_LESS_THAN_ZERO = -6L;
 
     private static final String ENTITY_API_URL = "/v1/accounts";
@@ -104,7 +105,8 @@ class AccountControllerTestITT {
         restAccountsMockMvc
                 .perform(
                         post(ENTITY_API_URL_FOR_OPEN_ACCOUNT + "/" + customer.getId() + "/accounts")
-                                .header("Initial-Credit", DEFAULT_BALANCE))
+                                .header("Initial-Credit", DEFAULT_BALANCE)
+                                .header("X-Request-Id", X_REQUEST_ID))
                 .andExpect(status().isCreated())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.balance").value(DEFAULT_BALANCE));
 
@@ -117,11 +119,32 @@ class AccountControllerTestITT {
 
     @Test
     @Transactional
+    void openAccountForExistingCustomerWithDuplicatedRequestId() throws Exception {
+        openAccountForExistingCustomerWithInitialCreditMoreThanZero();
+        Customer customer = new Customer();
+        customer.setName("Mahdi");
+        customer.setSurname("Sharifi");
+
+        customerRepository.saveAndFlush(customer); //Save Customer;
+
+        restAccountsMockMvc
+                .perform(
+                        post(ENTITY_API_URL_FOR_OPEN_ACCOUNT + "/" + customer.getId() + "/accounts?lang=en")
+                                .header("Initial-Credit", DEFAULT_BALANCE)
+                                .header("X-Request-Id", X_REQUEST_ID))
+                .andExpect(status().isBadRequest())
+                .andExpect(result -> assertTrue(result.getResolvedException() instanceof BadRequestAlertException));
+    }
+
+
+    @Test
+    @Transactional
     void openAccountForNonExistingCustomer() throws Exception {
         restAccountsMockMvc
                 .perform(
                         post(ENTITY_API_URL_FOR_OPEN_ACCOUNT + "/" + Integer.MAX_VALUE + "/accounts?lang=en")
-                                .header("Initial-Credit", DEFAULT_BALANCE))
+                                .header("Initial-Credit", DEFAULT_BALANCE)
+                                .header("X-Request-Id", X_REQUEST_ID))
                 .andExpect(status().isNotFound())
 //                .andExpect(result -> assertTrue(result.getResolvedException().getMessage().contains("Could not find customer with id:")))
                 .andExpect(result -> assertTrue(result.getResolvedException() instanceof CustomerNotFoundException));
@@ -140,11 +163,12 @@ class AccountControllerTestITT {
         restAccountsMockMvc
                 .perform(
                         post(ENTITY_API_URL_FOR_OPEN_ACCOUNT + "/" + customer.getId() + "/accounts?lang=en")
-                                .header("Initial-Credit", DEFAULT_BALANCE_LESS_THAN_ZERO))
+                                .header("Initial-Credit", DEFAULT_BALANCE_LESS_THAN_ZERO)
+                                .header("X-Request-Id", X_REQUEST_ID))
                 .andExpect(status().isBadRequest())
-//                .andExpect(result -> assertEquals("initial Credit can not be less than zero!", result.getResolvedException().getMessage()))
                 .andExpect(result -> assertTrue(result.getResolvedException() instanceof BadRequestAlertException));
     }
+
 
     @Test
     @Transactional
