@@ -6,7 +6,7 @@
 |  |   |  ||  ||  ||  ||  |    |  '--' /\ '-'  ||  ||  ||  \  \     '  '--'\
 `--'   `--'`--'`--''--'`--'    `------'  `--`--'`--''--'`--'`--'     `-----'
 
-## ${spring.application.name}
+## ${spring.application.name}   ${environement.property}
 ## Built with Spring Boot :: ${spring-boot.version}
 ## Developed By Mahdi Sharifi
 

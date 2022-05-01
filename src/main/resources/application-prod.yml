@@ -1,3 +1,6 @@
+environement:
+  property: I AM PROD
+
 logging:
   level:
     ROOT: INFO

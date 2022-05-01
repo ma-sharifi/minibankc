@@ -1,12 +1,39 @@
 version: '2.1'
 services:
+  database:
+    image: mariadb:latest
+    container_name: mariadb-3307
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_DATABASE: minibanc
+      #MYSQL_USER: root # ERROR 1396 (HY000) at line 2: Operation CREATE USER failed for 'root'@'%' -> {https://stackoverflow.com/questions/45086162/docker-mysql-error-1396-hy000-operation-create-user-failed-for-root}
+      MYSQL_PASSWORD: root
+      MYSQL_ROOT_PASSWORD: root #${MARIADB_ROOT_PASSWORD}
+    #    restart: always
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/1-init.sql #./init.sql MEANS docker/init.sql files.
+      - ./data.sql:/docker-entrypoint-initdb.d/2-data.sql
+      - /dev/maria/mariadb_data:/var/lib/mysql
+    networks:
+      backend:
+        aliases:
+          - "database"
+    healthcheck:
+      test: "/etc/init.d/mysql status"
+      interval: 10s
+      timeout: 5s
+      retries: 5
   minibankc:
-    image: picher/minibankc:0.0.1-SNAPSHOT
+    image: picher/minibankc:2022.0.4-SNAPSHOT
     container_name: minibankc
     environment:
-      PROFILE: "dev"
+      PROFILE: "prod"
     ports:
       - "8080:8080"
+    depends_on:
+      database:
+        condition: service_healthy
     networks:
       backend:
         aliases:
