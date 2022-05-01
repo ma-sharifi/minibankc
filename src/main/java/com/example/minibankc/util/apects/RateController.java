@@ -1,4 +1,4 @@
-package com.example.minibankc.util.filter;
+package com.example.minibankc.util.apects;
 
 import org.springframework.http.HttpStatus;
 

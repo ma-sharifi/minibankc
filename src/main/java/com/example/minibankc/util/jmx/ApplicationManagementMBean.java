@@ -1,9 +1,16 @@
 package com.example.minibankc.util.jmx;
 
+import com.github.benmanes.caffeine.cache.Cache;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
+import org.springframework.jmx.export.annotation.ManagedOperation;
+import org.springframework.jmx.export.annotation.ManagedResource;
+import org.springframework.stereotype.Component;
 
 import javax.management.MBeanServer;
 import javax.management.ObjectName;
+import java.util.Arrays;
 
 /**
  * @author Mahdi Sharifi
@@ -11,23 +18,17 @@ import javax.management.ObjectName;
  * https://www.linkedin.com/in/mahdisharifi/
  * @since 5/1/22
  */
-
+@Component
+@ManagedResource(objectName="minibankc-manamgement:name=MiniBankC-XManagement", description="My Managed Bean")
 @Slf4j
-public class ApplicationManagementMBean  implements ManagementMXBean {
+public class ApplicationManagementMBean  {
 
-    private final static String JMXBEAN_MINI_BANK_C = "MiniBankC-XManagement";
+    @Autowired
+    private  Cache<String, Integer> cache;
 
-    private MBeanServer platformMBeanServer;
-
-    private ObjectName objectName = null;
-
-    @Override
-    public boolean getProfile() {
-        return false;
-    }
-
-    @Override
-    public void clearCache() {
-        log.info("Cache Cleared");
+    @ManagedOperation
+    public void clearCaffeineCache() {
+        cache.cleanUp();
+        log.info("#Caffeine Cache Cleared");
     }
 }

@@ -1,4 +1,4 @@
-package com.example.minibankc.util.filter;
+package com.example.minibankc.util.apects;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

@@ -6,7 +6,6 @@ import com.example.minibankc.entity.Customer;
 import com.example.minibankc.exception.AccountNotFoundException;
 import com.example.minibankc.exception.BadRequestAlertException;
 import com.example.minibankc.exception.CustomerNotFoundException;
-import com.example.minibankc.mapper.AccountMapper;
 import com.example.minibankc.repository.AccountRepository;
 import com.example.minibankc.repository.CustomerRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,10 +21,8 @@ import javax.persistence.EntityManager;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.in;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasSize;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -60,9 +57,6 @@ class AccountControllerTestITT {
 
     @Autowired
     private CustomerRepository customerRepository;
-
-    @Autowired
-    private AccountMapper accountsMapper;
 
     @Autowired
     private EntityManager em;
@@ -136,7 +130,6 @@ class AccountControllerTestITT {
                 .andExpect(result -> assertTrue(result.getResolvedException() instanceof BadRequestAlertException));
     }
 
-
     @Test
     @Transactional
     void openAccountForNonExistingCustomer() throws Exception {
@@ -174,7 +167,7 @@ class AccountControllerTestITT {
     @Transactional
     void getAllAccounts() throws Exception {
         // Initialize the database
-        int count=(int) accountsRepository.count();
+        int count = (int) accountsRepository.count();
         accountsRepository.saveAndFlush(account);
         // Get all the accountsList
         restAccountsMockMvc
@@ -182,7 +175,7 @@ class AccountControllerTestITT {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.[*].id").value(hasItem(account.getId().intValue())))
-                .andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(count+1)));
+                .andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(count + 1)));
     }
 
     @Test

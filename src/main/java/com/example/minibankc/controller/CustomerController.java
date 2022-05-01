@@ -7,7 +7,7 @@ import com.example.minibankc.exception.CustomerNotFoundException;
 import com.example.minibankc.service.CustomerService;
 import com.example.minibankc.util.HeaderUtil;
 import com.example.minibankc.util.PaginationUtil;
-import com.example.minibankc.util.filter.Loggable;
+import com.example.minibankc.util.apects.Loggable;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;

@@ -24,10 +24,7 @@ public class CustomerWebController {
     public CustomerWebController(CustomerService customerService) {
         this.customerService = customerService;
     }
-    @GetMapping("/international")
-    public String getInternationalPage() {
-        return "international";
-    }
+
     @RequestMapping("/customers/{customer-id}")
     public String getCustomer(Model model, @PathVariable("customer-id") Long customerId
             ,@RequestParam(required = false , defaultValue = "en") String lang){
