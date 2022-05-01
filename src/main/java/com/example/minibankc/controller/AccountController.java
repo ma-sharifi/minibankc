@@ -76,7 +76,7 @@ public class AccountController {
     public ResponseEntity<AccountDto> openAccountForExistingCustomer(
             @Parameter(description = "Id of customer to open an account for it")
             @PathVariable("customer-id") long customerId
-            ,@Parameter(description = "Initial-Credit must be greater than zero.")
+            ,@Parameter(description = "Initial-Credit must be greater than zero. I put it in header for filters. We can access headers on filter.")
             @RequestHeader("Initial-Credit") long initialCredit
             ,@Parameter(description = "Lang for changing message language. lang[en/nl]")
             @RequestParam(required = false , defaultValue = "en") String lang

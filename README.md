@@ -1,8 +1,9 @@
-**## Mini BankC Assessment**
+## Mini Bank C Assessment
 This is an assessment about handling a mini bank.
+The assessment consists of an API to be used for opening a new "current account" of already existing customers.
 
 # Introduction
-Welcome to Mini BankC.  
+Welcome to Mini Bank C.  
 ###The main features of this mini bank:
 1. Open an account for existing customer (specified by customer id) and add transaction if initial credit be more than zero.
 2. Get customer information by passing customer id to it.
@@ -61,14 +62,14 @@ $ git clone https://github.com/ma-sharifi/minibankc
 
 You can run it from Maven directly using the Spring Boot Maven plugin.
 $ ./mvnw spring-boot:run
+OR
+$ mvn spring-boot:run -Dspring-boot.run.profiles=dev/prod/test or with out profile, it will use with default
 
 # To build the code as a docker image, open a command-line 
-# window and execute the following command for each of module:
+# window and execute the following command and build image from Dockerfile:
 $ mvn clean package dockerfile:build
-OR
-$ ./mvnw spring-boot:build-image
 
-# Now we are going to use docker-compose to start the actual image.  To start the docker image, stay in the directory containing src and run the following command: 
+# Now we are going to use docker-compose to start the actual image. To start the docker image, run your Docker locally adn stay in the directory containing src and run the following command: 
 $ docker-compose -f docker/docker-compose.yml up
 $ docker-compose -f docker/docker-compose.yml down
 

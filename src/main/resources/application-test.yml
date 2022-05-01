@@ -1,19 +1,18 @@
 environement:
-  property: I AM THE DEFAULT
+  property: I AM TEST
 
 logging:
   level:
-    ROOT: INFO
-    org.hibernate.SQL: INFO
+    ROOT: DEBUG
+    org.hibernate.SQL: DEBUG
     com.example: DEBUG
 
 spring:
   application:
     name: minibankc
-
   datasource:
     url: jdbc:h2:mem:minibankc
-#    url: jdbc:h2:file:/data/demo if you  want to store data, uncomment this line
+    #    url: jdbc:h2:file:/data/demo if you  want to store data, uncomment this line
     driverClassName: org.h2.Driver
     username: sa
     password: sa
