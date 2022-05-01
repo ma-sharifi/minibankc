@@ -4,30 +4,33 @@ The assessment consists of an API to be used for opening a new "current account"
 
 # Introduction
 Welcome to Mini Bank C.  
-###The main features of this mini bank:
+##The main features of this mini bank:
 1. Open an account for existing customer (specified by customer id) and add transaction if initial credit be more than zero.
 2. Get customer information by passing customer id to it.
 
-###It also has:
+##It also has:
 1. Create a customer
 2. Get list of all customers/accounts
 3. Get an account by id
 4. Expose a ping for considering service is up.
 5. 2 language support (nl, en) as a query param. ?lang=en OR lang=nl
+6. Provided the X-Request-Id header for opening an account due to POST is not idempotent. X-Request-Id: ABCD. 
+7. Add JMX MiniBankC-XManagement for managing Application with JMX, like clear Caffeine cache.  
 
-###About This software:
+##About This software:
 1.  A Spring Boot server that is deployed as Docker container and can handle a mini bank.
 2.  There are tow main endpoints for manipulating data /v1/customers and /v1/accounts.
 3.  A H2 database used to hold the data in RAM. It has entities. Customer ,Account ,Account Transaction. 
     Each customer can have multiple accounts , and each account can have multiple accountTransactions.
 4.  Used https://start.jhipster.tech/jdl-studio/ for design and extract JPA entities and create some codes with jhipster-jdl.
-### MiniBankC Database Diagram
+5.  Used a Caffeine as a cache for storing X-Request-Id to handle Idempotence.
+## MiniBankC Database Diagram
 ![](https://s22.picofile.com/file/8449605868/db_diagram.jpg "")
 
 # Documentation
-###Swagger: 
+##Swagger: 
     documentation is: http://localhost:8080/swagger-ui/index.html
-###Postman: 
+##Postman: 
     You can find Postman file in postman folder in root of project.
     For each API call, was written test with Postman.
 
@@ -63,7 +66,7 @@ $ git clone https://github.com/ma-sharifi/minibankc
 You can run it from Maven directly using the Spring Boot Maven plugin.
 $ ./mvnw spring-boot:run
 OR
-$ mvn spring-boot:run -Dspring-boot.run.profiles=dev/prod/test or with out profile, it will use with default
+$ mvn spring-boot:run -Dspring-boot.run.profiles=dev/prod/test or without profile, it will use with default
 
 # To build the code as a docker image, open a command-line 
 # window and execute the following command and build image from Dockerfile:

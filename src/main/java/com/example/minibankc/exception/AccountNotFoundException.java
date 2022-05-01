@@ -20,7 +20,7 @@ public class AccountNotFoundException extends AbstractThrowableProblem {
 
     private static final String ENTITY_NAME ="account";
 
-    private static final String ERROR_KEY ="account.notfound.error.message";
+    private static final String ERROR_KEY ="account.notfound";
 
     public AccountNotFoundException(Long id) {
         super(ErrorConstants.DEFAULT_TYPE, "Could not find account with id: " + id, Status.NOT_FOUND, null, null, null, getAlertParameters(ENTITY_NAME, ERROR_KEY));

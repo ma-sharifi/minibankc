@@ -6,9 +6,9 @@ import com.example.minibankc.entity.Customer;
 import com.example.minibankc.exception.AccountNotFoundException;
 import com.example.minibankc.exception.BadRequestAlertException;
 import com.example.minibankc.exception.CustomerNotFoundException;
-import com.example.minibankc.mapper.AccountMapper;
 import com.example.minibankc.repository.AccountRepository;
 import com.example.minibankc.repository.CustomerRepository;
+import com.github.benmanes.caffeine.cache.Cache;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,10 +22,8 @@ import javax.persistence.EntityManager;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.in;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasSize;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -48,6 +46,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class AccountControllerTestITT {
 
     private static final Long DEFAULT_BALANCE = 5L;
+    private static final String X_REQUEST_ID = "ABCDE";
+    private static final String X_REQUEST_ID2 = "ABCDEF";
     private static final Long DEFAULT_BALANCE_LESS_THAN_ZERO = -6L;
 
     private static final String ENTITY_API_URL = "/v1/accounts";
@@ -61,13 +61,13 @@ class AccountControllerTestITT {
     private CustomerRepository customerRepository;
 
     @Autowired
-    private AccountMapper accountsMapper;
-
-    @Autowired
     private EntityManager em;
 
     @Autowired
     private MockMvc restAccountsMockMvc;
+
+    @Autowired
+    private  Cache<String, Integer> cache;
 
     private Account account;
 
@@ -97,14 +97,13 @@ class AccountControllerTestITT {
 
         customerRepository.saveAndFlush(customer); //Save Customer;
 
-        int accountCounter = customer.getAccounts().size();
-
         int databaseSizeBeforeCreate = accountsRepository.findAll().size();
         // Open an Account for existing customer
         restAccountsMockMvc
                 .perform(
                         post(ENTITY_API_URL_FOR_OPEN_ACCOUNT + "/" + customer.getId() + "/accounts")
-                                .header("Initial-Credit", DEFAULT_BALANCE))
+                                .header("Initial-Credit", DEFAULT_BALANCE)
+                                .header("X-Request-Id", X_REQUEST_ID))
                 .andExpect(status().isCreated())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.balance").value(DEFAULT_BALANCE));
 
@@ -114,6 +113,34 @@ class AccountControllerTestITT {
         Account testAccount = accountsList.get(accountsList.size() - 1);
         assertThat(testAccount.getBalance()).isEqualByComparingTo(DEFAULT_BALANCE);
     }
+    @Test
+    @Transactional
+    void openAccountForExistingCustomerWithDuplicatedRequestId() throws Exception {
+        cache.invalidateAll();
+        openAccountForExistingCustomerWithInitialCreditMoreThanZero();
+        Customer customer = new Customer();
+        customer.setName("Mahdi");
+        customer.setSurname("Sharifi");
+
+        customerRepository.saveAndFlush(customer); //Save Customer;
+
+        restAccountsMockMvc
+                .perform(
+                        post(ENTITY_API_URL_FOR_OPEN_ACCOUNT + "/" + customer.getId() + "/accounts?lang=en")
+                                .header("Initial-Credit", DEFAULT_BALANCE)
+                                .header("X-Request-Id", X_REQUEST_ID))
+                .andExpect(status().isBadRequest())
+                .andExpect(result -> assertTrue(result.getResolvedException() instanceof BadRequestAlertException));
+    }
+    @Test
+    @Transactional
+    void openAccountForExistingCustomerWithClearDuplicatedRequestIdCached() throws Exception {
+        cache.invalidateAll();
+        openAccountForExistingCustomerWithInitialCreditMoreThanZero();
+        cache.invalidateAll();
+        openAccountForExistingCustomerWithInitialCreditMoreThanZero();
+        cache.invalidateAll();
+    }
 
     @Test
     @Transactional
@@ -121,7 +148,8 @@ class AccountControllerTestITT {
         restAccountsMockMvc
                 .perform(
                         post(ENTITY_API_URL_FOR_OPEN_ACCOUNT + "/" + Integer.MAX_VALUE + "/accounts?lang=en")
-                                .header("Initial-Credit", DEFAULT_BALANCE))
+                                .header("Initial-Credit", DEFAULT_BALANCE)
+                                .header("X-Request-Id", X_REQUEST_ID))
                 .andExpect(status().isNotFound())
 //                .andExpect(result -> assertTrue(result.getResolvedException().getMessage().contains("Could not find customer with id:")))
                 .andExpect(result -> assertTrue(result.getResolvedException() instanceof CustomerNotFoundException));
@@ -140,17 +168,18 @@ class AccountControllerTestITT {
         restAccountsMockMvc
                 .perform(
                         post(ENTITY_API_URL_FOR_OPEN_ACCOUNT + "/" + customer.getId() + "/accounts?lang=en")
-                                .header("Initial-Credit", DEFAULT_BALANCE_LESS_THAN_ZERO))
+                                .header("Initial-Credit", DEFAULT_BALANCE_LESS_THAN_ZERO)
+                                .header("X-Request-Id", X_REQUEST_ID))
                 .andExpect(status().isBadRequest())
-//                .andExpect(result -> assertEquals("initial Credit can not be less than zero!", result.getResolvedException().getMessage()))
                 .andExpect(result -> assertTrue(result.getResolvedException() instanceof BadRequestAlertException));
     }
+
 
     @Test
     @Transactional
     void getAllAccounts() throws Exception {
         // Initialize the database
-        int count=(int) accountsRepository.count();
+        int count = (int) accountsRepository.count();
         accountsRepository.saveAndFlush(account);
         // Get all the accountsList
         restAccountsMockMvc
@@ -158,7 +187,7 @@ class AccountControllerTestITT {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.[*].id").value(hasItem(account.getId().intValue())))
-                .andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(count+1)));
+                .andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(count + 1)));
     }
 
     @Test

@@ -1,7 +1,7 @@
 {
 	"info": {
 		"_postman_id": "db7b1b5d-f7fd-4edd-8416-1a491773f4bd",
-		"name": "capgemini",
+		"name": "minibankc",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -44,7 +44,12 @@
 					},
 					{
 						"key": "Initial-Credit",
-						"value": "-1",
+						"value": "3",
+						"type": "text"
+					},
+					{
+						"key": "X-Request-Id",
+						"value": "ABCD2",
 						"type": "text"
 					}
 				],
@@ -218,7 +223,7 @@
 					"raw": "5"
 				},
 				"url": {
-					"raw": "http://localhost:8080/v1/accounts/111?lang=en",
+					"raw": "http://localhost:8080/v1/accounts/11?lang=nl",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -227,12 +232,12 @@
 					"path": [
 						"v1",
 						"accounts",
-						"111"
+						"11"
 					],
 					"query": [
 						{
 							"key": "lang",
-							"value": "en"
+							"value": "nl"
 						}
 					]
 				}

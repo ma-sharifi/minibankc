@@ -8,18 +8,48 @@ package com.example.minibankc.util;
  * Extracted from JHipster Code generator
  */
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
+@Slf4j
 public final class HeaderUtil {
-    private static final Logger log = LoggerFactory.getLogger(HeaderUtil.class);
 
     private HeaderUtil() {
+    }
+
+    public static Map<String, String> getHeadersInfo(HttpServletRequest request) {
+        Map<String, String> map = new HashMap<>();
+        Enumeration<String> headerNames = request.getHeaderNames();
+        while (headerNames.hasMoreElements()) {
+            String key = headerNames.nextElement();
+            String value = request.getHeader(key);
+            map.put(key, value);
+        }
+        return map;
+    }
+
+    public static Map<String, String> getHeadersInfo(HttpServletResponse response) {
+        Map<String, String> map = new HashMap<>();
+        if (null != response) {
+            map = response.getHeaderNames()
+                    .stream()
+                    .collect(Collectors.toMap(
+                            Function.identity(),
+                            h -> (response.getHeader(h))
+                    ));
+        }
+        return map;
     }
 
     public static HttpHeaders createAlert(String applicationName, String message, String param) {
@@ -34,12 +64,14 @@ public final class HeaderUtil {
         return headers;
     }
 
-    public static HttpHeaders createEntityCreationAlert(String applicationName, boolean enableTranslation, String entityName, String param) {
+    public static HttpHeaders createEntityCreationAlert(String applicationName, boolean enableTranslation, String
+            entityName, String param) {
         String message = enableTranslation ? applicationName + "." + entityName + ".created" : "A new " + entityName + " is created with identifier " + param;
         return createAlert(applicationName, message, param);
     }
 
-    public static HttpHeaders createFailureAlert(String applicationName, boolean enableTranslation, String entityName, String errorKey, String defaultMessage) {
+    public static HttpHeaders createFailureAlert(String applicationName, boolean enableTranslation, String
+            entityName, String errorKey, String defaultMessage) {
         log.error("Entity processing failed, {}", defaultMessage);
         String message = enableTranslation ? "error." + errorKey : defaultMessage;
         HttpHeaders headers = new HttpHeaders();

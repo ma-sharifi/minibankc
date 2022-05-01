@@ -109,7 +109,7 @@ class CustomerControllerTestIT {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(customerDto.toJSON()))
                 .andExpect(status().isBadRequest())
-                .andExpect(result -> assertEquals(messages.getMessage("customer.alreadyhaveid.error.message", null, null), result.getResolvedException().getMessage()))
+                .andExpect(result -> assertEquals(messages.getMessage("customer.alreadyhaveid", null, null), result.getResolvedException().getMessage()))
                 .andExpect(result -> assertTrue(result.getResolvedException() instanceof BadRequestAlertException));
     }
 

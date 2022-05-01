@@ -54,7 +54,7 @@ public class AccountServiceImpl implements AccountService {
         log.debug("Request to get Account : {}", id);
         Optional<Account> accountOptional= accountRepository.findById(id);
         return accountOptional.map(accountMapper::toDto).orElseThrow(()->
-           new AccountNotFoundException(String.format(messages.getMessage("account.notfound.error.message", null, new Locale(lang)),id)));
+           new AccountNotFoundException(String.format(messages.getMessage("account.notfound", null, new Locale(lang)),id)));
     }
 
     @Override
@@ -80,7 +80,7 @@ public class AccountServiceImpl implements AccountService {
             accountRepository.save(account);
             return accountMapper.toDto(account);
         }else
-           throw new CustomerNotFoundException(String.format(messages.getMessage("customer.notfound.error.message", null, new Locale(lang)),customerId));
+           throw new CustomerNotFoundException(String.format(messages.getMessage("customer.notfound", null, new Locale(lang)),customerId));
 
     }
 
