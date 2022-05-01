@@ -66,12 +66,10 @@ OR
 $ mvn spring-boot:run -Dspring-boot.run.profiles=dev/prod/test or with out profile, it will use with default
 
 # To build the code as a docker image, open a command-line 
-# window and execute the following command:
+# window and execute the following command and build image from Dockerfile:
 $ mvn clean package dockerfile:build
-OR
-$ ./mvnw spring-boot:build-image
 
-# Now we are going to use docker-compose to start the actual image.  To start the docker image, stay in the directory containing src and run the following command: 
+# Now we are going to use docker-compose to start the actual image. To start the docker image, run your Docker locally adn stay in the directory containing src and run the following command: 
 $ docker-compose -f docker/docker-compose.yml up
 $ docker-compose -f docker/docker-compose.yml down
 
