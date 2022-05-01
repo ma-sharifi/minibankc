@@ -28,11 +28,11 @@ import java.util.Set;
 public class CustomerDto extends BaseDto {
 
     @NotNull(message = "#name can not be null")
-    @Size(message = "#Size of name mut be between 2 and 60",min = 2, max = 60)
+    @Size(message = "#Size of name mutt be between 2 and 60",min = 2, max = 60)
     private String name;
 
     @NotNull(message = "#surname can not be null")
-    @Size(message = "#Size of name mut be between 2 and 60",min = 2, max = 60)
+    @Size(message = "#Size of name mutt be between 2 and 60",min = 2, max = 60)
     private String surname;
 
     private Set<AccountDto> accounts ;

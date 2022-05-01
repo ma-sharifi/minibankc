@@ -49,7 +49,7 @@ public class CustomerServiceImpl implements CustomerService {
         Optional<Customer> customerOptional= customerRepository.findById(customerId);
         customerOptional.ifPresent(customer -> log.debug("#customerOptional with id: "+customerId+" ;"+customer));
         return customerOptional.map(customerMapper::toDto).orElseThrow(
-                () -> new CustomerNotFoundException(String.format(messages.getMessage("customer.notfound.error.message", null, new Locale(lang)),customerId)));
+                () -> new CustomerNotFoundException(String.format(messages.getMessage("customer.notfound", null, new Locale(lang)),customerId)));
     }
 
     /**

@@ -18,7 +18,7 @@ public class CustomerNotFoundException extends AbstractThrowableProblem {
 
     private static final String ENTITY_NAME="customer";
 
-    private static final String ERROR_KEY="customer.notfound.error.message";
+    private static final String ERROR_KEY="customer.notfound";
 
     public CustomerNotFoundException(Long id) {
         super(ErrorConstants.DEFAULT_TYPE, "Could not find customer with id: " + id, Status.NOT_FOUND, null, null, null, getAlertParameters(ENTITY_NAME, ERROR_KEY));
