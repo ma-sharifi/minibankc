@@ -1,6 +1,5 @@
 package com.example.minibankc.controller;
 
-import com.example.minibankc.dto.AccountDto;
 import com.example.minibankc.dto.CustomerDto;
 import com.example.minibankc.exception.BadRequestAlertException;
 import com.example.minibankc.exception.CustomerNotFoundException;
@@ -8,15 +7,8 @@ import com.example.minibankc.service.CustomerService;
 import com.example.minibankc.util.HeaderUtil;
 import com.example.minibankc.util.PaginationUtil;
 import com.example.minibankc.util.apects.Loggable;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.data.domain.Page;
@@ -42,48 +34,36 @@ import java.util.Locale;
 @RequestMapping("/v1")
 @Tag(name = "customer-controller for handling customers", description = "Get/Create the customer")
 @Slf4j
-public class CustomerController {
+public class CustomerController implements ICustomerController {
 
     private static final String ENTITY_NAME = "customer";
     private final CustomerService customerService;
+    private final MessageSource messages;
     @Value("${server.port}")
     private int serverPort;
-    @Autowired
-    private MessageSource messages;
     @Value("${spring.application.name}")
     private String applicationName;
 
-
-    public CustomerController(CustomerService customerService) {
-
+    public CustomerController(CustomerService customerService, MessageSource messages) {
+        this.messages = messages;
         this.customerService = customerService;
-
     }
 
     /**
      * {@code GET  /customers/:customer-id} : get the "customer-id" customer.
      *
-     * @param customerId the id of the customerDto to retrieve.
+     * @param customerId the id of the customer to retrieve.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the customerDto, or with status {@code 404 (Not Found)}.
      */
     @Loggable
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Found the CustomerDto",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = CustomerDto.class))}),
-            @ApiResponse(responseCode = "400", description = "Invalid Request.", content = @Content),
-            @ApiResponse(responseCode = "404", description = "Customer not found", content = @Content)})
-    @Operation(summary = "Return one customer")
     @GetMapping("/customers/{customer-id}")
     public ResponseEntity<CustomerDto> getCustomerById(
-            @Parameter(description = "Id of customer to be searched")
             @PathVariable("customer-id") long customerId
-            , @Parameter(description = "Lang for changing message language. lang[en/nl]")
-            @RequestParam(required = false, defaultValue = "en") String lang) throws CustomerNotFoundException {
+            , @RequestParam(required = false, defaultValue = "en") String lang) throws CustomerNotFoundException {
         return ResponseEntity.ok().body(customerService.findOne(customerId, lang));
     }
 
     //*****************This part there was not at assignment, but for manipulating data we need them.*********************
-    @Operation(summary = "Ping return pong for checking service")
     @GetMapping("ping")
     public ResponseEntity<String> pong() {
         return ResponseEntity.ok().body("pong");
@@ -96,8 +76,6 @@ public class CustomerController {
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new customerDto, or with status {@code 400 (Bad Request)} if the customer has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @Operation(summary = "Create a new customer and return its URI in location header")
-    @ApiResponse(responseCode = "201", description = "Created a customer", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = AccountDto.class))})
     @PostMapping("/customers")
     public ResponseEntity<CustomerDto> createCustomer(@Valid @RequestBody CustomerDto customerDto
             , @RequestParam(required = false, defaultValue = "en") String lang) throws URISyntaxException {
@@ -115,11 +93,9 @@ public class CustomerController {
 
     /**
      * {@code GET  /customers} : get all the customers.
-     *
      * @param pageable the pagination information.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of customers in body.
      */
-    @Operation(summary = "Return customer list")
     @GetMapping("/customers")
     public ResponseEntity<List<CustomerDto>> getAllCustomers(@org.springdoc.api.annotations.ParameterObject Pageable pageable) {
         log.debug("REST request to get a page of Customers");
