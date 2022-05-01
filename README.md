@@ -15,6 +15,7 @@ Welcome to Mini Bank C.
 4. Expose a ping for considering service is up.
 5. 2 language support (nl, en) as a query param. ?lang=en OR lang=nl
 6. Provided the X-Request-Id header for opening an account due to POST is not idempotent. X-Request-Id: ABCD. 
+   X-Request-Id-X-RateLimit-Remaining , X-Request-Id-X-RateLimit-Limit added to response header.
 7. Add JMX MiniBankC-XManagement for managing Application with JMX, like clear Caffeine cache.  
 
 ##About This software:
