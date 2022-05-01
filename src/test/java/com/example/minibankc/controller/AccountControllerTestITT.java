@@ -8,6 +8,7 @@ import com.example.minibankc.exception.BadRequestAlertException;
 import com.example.minibankc.exception.CustomerNotFoundException;
 import com.example.minibankc.repository.AccountRepository;
 import com.example.minibankc.repository.CustomerRepository;
+import com.github.benmanes.caffeine.cache.Cache;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +47,7 @@ class AccountControllerTestITT {
 
     private static final Long DEFAULT_BALANCE = 5L;
     private static final String X_REQUEST_ID = "ABCDE";
+    private static final String X_REQUEST_ID2 = "ABCDEF";
     private static final Long DEFAULT_BALANCE_LESS_THAN_ZERO = -6L;
 
     private static final String ENTITY_API_URL = "/v1/accounts";
@@ -63,6 +65,9 @@ class AccountControllerTestITT {
 
     @Autowired
     private MockMvc restAccountsMockMvc;
+
+    @Autowired
+    private  Cache<String, Integer> cache;
 
     private Account account;
 
@@ -92,8 +97,6 @@ class AccountControllerTestITT {
 
         customerRepository.saveAndFlush(customer); //Save Customer;
 
-        int accountCounter = customer.getAccounts().size();
-
         int databaseSizeBeforeCreate = accountsRepository.findAll().size();
         // Open an Account for existing customer
         restAccountsMockMvc
@@ -110,10 +113,10 @@ class AccountControllerTestITT {
         Account testAccount = accountsList.get(accountsList.size() - 1);
         assertThat(testAccount.getBalance()).isEqualByComparingTo(DEFAULT_BALANCE);
     }
-
     @Test
     @Transactional
     void openAccountForExistingCustomerWithDuplicatedRequestId() throws Exception {
+        cache.invalidateAll();
         openAccountForExistingCustomerWithInitialCreditMoreThanZero();
         Customer customer = new Customer();
         customer.setName("Mahdi");
@@ -128,6 +131,15 @@ class AccountControllerTestITT {
                                 .header("X-Request-Id", X_REQUEST_ID))
                 .andExpect(status().isBadRequest())
                 .andExpect(result -> assertTrue(result.getResolvedException() instanceof BadRequestAlertException));
+    }
+    @Test
+    @Transactional
+    void openAccountForExistingCustomerWithClearDuplicatedRequestIdCached() throws Exception {
+        cache.invalidateAll();
+        openAccountForExistingCustomerWithInitialCreditMoreThanZero();
+        cache.invalidateAll();
+        openAccountForExistingCustomerWithInitialCreditMoreThanZero();
+        cache.invalidateAll();
     }
 
     @Test

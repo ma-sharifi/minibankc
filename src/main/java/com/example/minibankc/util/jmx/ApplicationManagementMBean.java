@@ -4,6 +4,7 @@ import com.github.benmanes.caffeine.cache.Cache;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.jmx.export.annotation.ManagedAttribute;
 import org.springframework.jmx.export.annotation.ManagedOperation;
 import org.springframework.jmx.export.annotation.ManagedResource;
 import org.springframework.stereotype.Component;
@@ -19,16 +20,19 @@ import java.util.Arrays;
  * @since 5/1/22
  */
 @Component
-@ManagedResource(objectName="minibankc-manamgement:name=MiniBankC-XManagement", description="My Managed Bean")
+@ManagedResource(objectName="minibankc-xmanamgement:name=MiniBankC-XManagement", description="MiniBankC Management Bean")
 @Slf4j
 public class ApplicationManagementMBean  {
 
-    @Autowired
-    private  Cache<String, Integer> cache;
+    private final Cache<String, Integer> cache;
 
-    @ManagedOperation
+    public ApplicationManagementMBean(Cache<String, Integer> cache) {
+        this.cache = cache;
+    }
+
+    @ManagedOperation(description="#Clearing Caffeine Cache")
     public void clearCaffeineCache() {
-        cache.cleanUp();
-        log.info("#Caffeine Cache Cleared");
+        cache.invalidateAll();
+        log.info("#Caffeine Cache Cleared.");
     }
 }

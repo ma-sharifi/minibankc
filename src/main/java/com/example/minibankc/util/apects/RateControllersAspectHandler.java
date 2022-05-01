@@ -53,6 +53,7 @@ public class RateControllersAspectHandler {
         String parameterName = annotation.parameterName();
         String parameterValue = httpServletRequest.getHeader(parameterName);
         String lang = httpServletRequest.getParameter("lang");
+        if(lang==null) lang="en";
         String cacheKey = parameterName + ":" + parameterValue;
         Integer cacheValue = cache.getIfPresent(cacheKey);
         if (cacheValue == null)
@@ -61,8 +62,8 @@ public class RateControllersAspectHandler {
             cacheValue--;
         }
         //Set helper Header for client information
-        httpServletResponse.setHeader(parameterName + "-RateLimit-Remaining", cacheValue + "");
-        httpServletResponse.setHeader(parameterName + "-RateLimit-Limit", annotation.rateLimit() + "");
+        httpServletResponse.setHeader(parameterName + "-X-RateLimit-Remaining", cacheValue + "");
+        httpServletResponse.setHeader(parameterName + "-X-RateLimit-Limit", annotation.rateLimit() + "");
         log.debug("#RateControllers->read cache key: " + cacheKey + " ;value: " + cacheValue + " ;" + annotation.httpStatusResponse().value());
         if (cacheValue < 1) {
             throw new BadRequestAlertException(String.format(messages.getMessage("request.id.duplicated", null, new Locale(lang)) + ": " + parameterValue), "customer", "request.id.duplicated");
