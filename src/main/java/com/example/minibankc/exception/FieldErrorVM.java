@@ -1,5 +1,7 @@
 package com.example.minibankc.exception;
 
+import lombok.Data;
+
 import java.io.Serializable;
 /**
  * @author Mahdi Sharifi
@@ -8,6 +10,7 @@ import java.io.Serializable;
  * @since 4/30/22
  * Extracted from JHipster
  */
+@Data
 public class FieldErrorVM implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -22,17 +25,5 @@ public class FieldErrorVM implements Serializable {
         this.objectName = dto;
         this.field = field;
         this.message = message;
-    }
-
-    public String getObjectName() {
-        return objectName;
-    }
-
-    public String getField() {
-        return field;
-    }
-
-    public String getMessage() {
-        return message;
     }
 }

@@ -23,9 +23,6 @@ public class GSONModel {
     public String toJSON() {
         return JSONFormatter.toJSON(this);
     }
-    public Map toMAP() {
-        return JSONFormatter.toMap(this);
-    }
 
     @Override
     public String toString() {

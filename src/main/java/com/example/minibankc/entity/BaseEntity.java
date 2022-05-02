@@ -13,6 +13,7 @@ import java.util.Date;
  * @version 2022.1.1
  * https://www.linkedin.com/in/mahdisharifi/
  * @since 4/24/22
+ *
  */
 @MappedSuperclass
 @Data

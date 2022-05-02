@@ -26,6 +26,7 @@ import java.util.List;
  * @version 2022.1.1
  * https://www.linkedin.com/in/mahdisharifi/
  * @since 5/1/22
+ * Used this interface for moving Swagger annotation into this and spare main controller.
  */
 
 public interface ICustomerController {

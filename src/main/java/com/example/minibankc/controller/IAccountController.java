@@ -2,11 +2,7 @@ package com.example.minibankc.controller;
 
 import com.example.minibankc.dto.AccountDto;
 import com.example.minibankc.exception.AccountNotFoundException;
-import com.example.minibankc.exception.BadRequestAlertException;
 import com.example.minibankc.exception.CustomerNotFoundException;
-import com.example.minibankc.util.PaginationUtil;
-import com.example.minibankc.util.apects.Loggable;
-import com.example.minibankc.util.apects.RateController;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -14,24 +10,18 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springdoc.api.annotations.ParameterObject;
-import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.net.URI;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * @author Mahdi Sharifi
  * @version 2022.1.1
  * https://www.linkedin.com/in/mahdisharifi/
  * @since 5/1/22
+ * Used this interface for moving Swagger annotation into this and spare main controller.
  */
 
 public interface IAccountController {

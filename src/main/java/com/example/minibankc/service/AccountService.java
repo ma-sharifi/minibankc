@@ -13,7 +13,14 @@ import org.springframework.data.domain.Pageable;
  * @since 4/26/22
  */
 public interface AccountService {
-
+    /**
+     *  Open an account if customer exist
+     * @param customerId
+     * @param initialCredit
+     * @param lang
+     * @return
+     * @throws CustomerNotFoundException
+     */
     AccountDto openAccountForExistingCustomer(long customerId, long initialCredit, String lang) throws CustomerNotFoundException;
 
     /**

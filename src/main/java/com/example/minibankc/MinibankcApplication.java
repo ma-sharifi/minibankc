@@ -9,6 +9,11 @@ import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
 import java.util.Locale;
 
+/**
+ * This application Handle a mini bank operation
+ * 1- oen an account for existing customer
+ * 2- return customer information
+ */
 @SpringBootApplication
 public class MinibankcApplication {
 

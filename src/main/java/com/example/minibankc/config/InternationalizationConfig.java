@@ -36,7 +36,7 @@ public class InternationalizationConfig {
      * By default, a Spring Boot application will look for message files containing
      * internationalization keys and values in the src/main/resources folder.
      *
-     * @return
+     * @return ResourceBundleMessageSource
      */
     @Bean
     public ResourceBundleMessageSource messageSource() {

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
  * @version 2022.1.1
  * https://www.linkedin.com/in/mahdisharifi/
  * @since 4/27/22
+ * Handle our simple UI
  */
 @Controller
 @Slf4j

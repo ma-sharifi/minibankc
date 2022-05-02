@@ -1,4 +1,4 @@
-package com.example.minibankc.util.apects;
+package com.example.minibankc.apects;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -10,6 +10,7 @@ import java.lang.annotation.Target;
  * @version 2022.1.1
  * https://www.linkedin.com/in/mahdisharifi/
  * @since 5/1/22
+ * Used for log request and response of request + headers
  */
 
 @Target({ElementType.METHOD})

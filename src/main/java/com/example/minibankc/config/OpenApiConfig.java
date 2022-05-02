@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Configuration;
  * @version 2022.1.1
  * https://www.linkedin.com/in/mahdisharifi/
  * @since 4/30/22
+ * Change Swagger Header UI
  */
 @Configuration
 public class OpenApiConfig {
