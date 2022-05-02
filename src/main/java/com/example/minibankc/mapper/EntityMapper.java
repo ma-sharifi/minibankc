@@ -5,10 +5,7 @@ package com.example.minibankc.mapper;
  * @version 2022.1.1
  * https://www.linkedin.com/in/mahdisharifi/
  * @since 4/27/22
- * Extracted from JHipster
- */
 
-/**
  * Contract for a generic dto to entity mapper.
  *
  * @param <D> - DTO type parameter.

@@ -4,11 +4,11 @@ The assessment consists of an API to be used for opening a new "current account"
 
 # Introduction
 Welcome to Mini Bank C.  
-##The main features of this mini bank:
+## The main features of this mini bank:
 1. Open an account for existing customer (specified by customer id) and add transaction if initial credit be more than zero.
 2. Get customer information by passing customer id to it.
 
-##It also has:
+## It also has:
 1. Create a customer
 2. Get list of all customers/accounts
 3. Get an account by id
@@ -18,20 +18,19 @@ Welcome to Mini Bank C.
    X-Request-Id-X-RateLimit-Remaining , X-Request-Id-X-RateLimit-Limit added to response header.
 7. Add JMX MiniBankC-XManagement for managing Application with JMX, like clear Caffeine cache.  
 
-##About This software:
+## About This software:
 1.  A Spring Boot server that is deployed as Docker container and can handle a mini bank.
 2.  There are tow main endpoints for manipulating data /v1/customers and /v1/accounts.
 3.  A H2 database used to hold the data in RAM. It has entities. Customer ,Account ,Account Transaction. 
     Each customer can have multiple accounts , and each account can have multiple accountTransactions.
-4.  Used https://start.jhipster.tech/jdl-studio/ for design and extract JPA entities and create some codes with jhipster-jdl.
-5.  Used a Caffeine as a cache for storing X-Request-Id to handle Idempotence.
+4.  Used a Caffeine as a cache for storing X-Request-Id to handle Idempotence.
 ## MiniBankC Database Diagram
 ![](https://s22.picofile.com/file/8449605868/db_diagram.jpg "")
 
 # Documentation
-##Swagger: 
+## Swagger: 
     documentation is: http://localhost:8080/swagger-ui/index.html
-##Postman: 
+## Postman: 
     You can find Postman file in postman folder in root of project.
     For each API call, was written test with Postman.
 
@@ -97,6 +96,16 @@ This video can help: https://www.youtube.com/watch?v=R8_veQiYBjI
 ```
 ## Simple UI
 A simple UI provided at this address: /v1/ui/customers/1?lang=nl
+
+## For enterprise support
+1- Using cache for saving data, but in financial application it must not store any balance. just for saving naming information.
+2- Sharding data between multi clusters by customer surname. 
+For example if we have 2 clusters, surname that start with a-j will put into cluster 1 and surname with start k-z will put to cluster 2.
+I assume frequency of letter a-j in more than frequency of letter between k-z. According to this link https://en.wikipedia.org/wiki/Letter_frequency
+It means with this sharding we have the same number of data between each cluster.
+customer with surname Sharifi will save into cluster 2 and customer with surname Chang will save into cluster 1, because
+we split data by similar things (Sharding) according to book Art of Scalability and its Scale Cube.
+
 ## Contact
 I'd like you to send me an email on <mahdi.elu@gmail.com> about anything you'd want to say about this software.
 

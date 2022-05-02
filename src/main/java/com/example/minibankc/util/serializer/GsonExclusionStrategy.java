@@ -9,7 +9,6 @@ import com.google.gson.FieldAttributes;
  * @since 11/11/2019
  * extracted from paypal
  */
-//https://howtoprogram.xyz/2016/10/16/ignore-or-exclude-field-in-gson/
 public class GsonExclusionStrategy implements ExclusionStrategy {
 
     public boolean shouldSkipField(FieldAttributes f) {

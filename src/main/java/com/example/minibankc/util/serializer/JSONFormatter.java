@@ -42,17 +42,6 @@ public final class JSONFormatter {
     }
 
     /**
-     * Set a format for gson FIELD_NAMING_POLICY. See {@link FieldNamingPolicy}
-     *
-     * @param FIELD_NAMING_POLICY
-     */
-    public static final void setFIELD_NAMING_POLICY(
-            FieldNamingPolicy FIELD_NAMING_POLICY) {
-        GSON = new GsonBuilder().setPrettyPrinting()
-                .setFieldNamingPolicy(FIELD_NAMING_POLICY).create();
-    }
-
-    /**
      * Converts a Raw Type to JSON String
      *
      * @param <T> Type to be converted
@@ -63,38 +52,5 @@ public final class JSONFormatter {
         if (t != null)
             return GSON.toJson(t);
         return "{}";
-    }
-
-    public static <T> Map toMap(T t) {
-        Type type = new TypeToken<Map<String, String>>() {
-        }.getType();
-        return GSON.fromJson(toJSON(t), type);
-    }
-
-    /**
-     * Converts a JSON String to object representation
-     *
-     * @param <T>            Type to be converted
-     * @param responseString JSON representation
-     * @param clazz          Target class
-     * @return Object of the target type
-     */
-    public static <T> T fromJSON(String responseString, Class<T> clazz) {
-        T t = null;
-        if (clazz.isAssignableFrom(responseString.getClass())) {
-            t = clazz.cast(responseString);
-        } else {
-            t = GSON.fromJson(responseString, clazz);
-        }
-        return t;
-    }
-
-    public static <T> T fromJSON(String json, Type typeOfT) throws JsonSyntaxException {
-        if (json == null) {
-            return null;
-        } else {
-            StringReader reader = new StringReader(json);
-            return GSON.fromJson(reader, typeOfT);
-        }
     }
 }

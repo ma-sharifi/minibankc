@@ -11,7 +11,6 @@ import java.lang.annotation.Target;
  * @since 11/11/2019
  * extracted from paypal
  */
-//https://howtoprogram.xyz/2016/10/16/ignore-or-exclude-field-in-gson/
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)

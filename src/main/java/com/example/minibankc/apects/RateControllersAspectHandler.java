@@ -1,4 +1,4 @@
-package com.example.minibankc.util.apects;
+package com.example.minibankc.apects;
 
 import com.example.minibankc.exception.BadRequestAlertException;
 import com.github.benmanes.caffeine.cache.Cache;
@@ -22,7 +22,7 @@ import java.util.Locale;
  * @version 2022.1.1
  * https://www.linkedin.com/in/mahdisharifi/
  * @since 5/1/22
- * This class handle Rate Controller for every endpoint we used it asa annotation above it
+ * This class handle Rate Controller/Idempotence for every endpoint we used it asa annotation above it
  */
 @Aspect //let know Spring that this is an Aspect class
 @Component //Spring will consider this class as a Spring bean
@@ -47,7 +47,7 @@ public class RateControllersAspectHandler {
         return methodAnnotated.getAnnotation(RateController.class);
     }
 
-    @Around("@annotation(RateController)") //define the logic to execute
+    @Around("@annotation(com.example.minibankc.apects.RateController)") //define the logic to execute
     public Object rateHandler(ProceedingJoinPoint joinPoint) throws Throwable {
         RateController annotation = getAnnotation(joinPoint);
         String parameterName = annotation.parameterName();

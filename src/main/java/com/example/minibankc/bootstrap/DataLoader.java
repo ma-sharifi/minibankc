@@ -18,7 +18,7 @@ import java.time.Instant;
  * https://www.linkedin.com/in/mahdisharifi/
  * @since 4/26/22
  *
- * We fill table with some data here
+ * We fill table with some mock data here
  */
 @Component
 @Slf4j

@@ -11,6 +11,7 @@ import java.util.Map;
  * @version 2022.1.1
  * https://www.linkedin.com/in/mahdisharifi/
  * @since 4/27/22
+ * When customer not found throw this exception
  */
 public class CustomerNotFoundException extends AbstractThrowableProblem {
 

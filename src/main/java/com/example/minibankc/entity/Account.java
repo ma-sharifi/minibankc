@@ -8,7 +8,12 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.HashSet;
 import java.util.Set;
-
+/**
+ * @author Mahdi Sharifi
+ * @version 2022.1.1
+ * https://www.linkedin.com/in/mahdisharifi/
+ * @since 4/26/22
+ */
 /**
  * save customers account data
  */

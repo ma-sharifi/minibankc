@@ -6,7 +6,7 @@ import com.example.minibankc.exception.CustomerNotFoundException;
 import com.example.minibankc.service.CustomerService;
 import com.example.minibankc.util.HeaderUtil;
 import com.example.minibankc.util.PaginationUtil;
-import com.example.minibankc.util.apects.Loggable;
+import com.example.minibankc.apects.Loggable;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;

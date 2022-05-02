@@ -28,6 +28,19 @@ public final class HeaderUtil {
     private HeaderUtil() {
     }
 
+    public static String getRequestClientIpComplete(HttpServletRequest req) {
+        String clientIp = req.getHeader("X-Real-IP");
+        if (clientIp == null || "".equals(clientIp)) { // extract from forward ips
+            String ipForwarded = req.getHeader("X-FORWARDED-FOR");
+            String[] ips = ipForwarded == null ? null : ipForwarded.split(",");
+            clientIp = (ips == null || ips.length == 0) ? null : ips[0];
+            // extract from remote addr
+            clientIp = (clientIp == null || clientIp.isEmpty()) ? req.getRemoteAddr() : clientIp;
+        }
+        if("0:0:0:0:0:0:0:1".equals(clientIp)) clientIp="127.0.0.1";
+        return clientIp;
+    }
+
     public static Map<String, String> getHeadersInfo(HttpServletRequest request) {
         Map<String, String> map = new HashMap<>();
         Enumeration<String> headerNames = request.getHeaderNames();
@@ -46,7 +59,7 @@ public final class HeaderUtil {
                     .stream()
                     .collect(Collectors.toMap(
                             Function.identity(),
-                            h -> (response.getHeader(h))
+                            response::getHeader
                     ));
         }
         return map;

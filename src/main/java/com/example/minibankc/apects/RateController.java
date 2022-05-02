@@ -1,4 +1,4 @@
-package com.example.minibankc.util.apects;
+package com.example.minibankc.apects;
 
 import org.springframework.http.HttpStatus;
 
@@ -13,6 +13,8 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * @version 2022.1.1
  * https://www.linkedin.com/in/mahdisharifi/
  * @since 5/1/22
+ *
+ * Handle rate control and idempotence when add this annotation on method
  */
 @Target({ElementType.METHOD})
 @Retention(RUNTIME)

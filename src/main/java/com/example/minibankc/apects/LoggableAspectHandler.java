@@ -1,6 +1,5 @@
-package com.example.minibankc.util.apects;
+package com.example.minibankc.apects;
 
-import com.example.minibankc.util.AppUtil;
 import com.example.minibankc.util.HeaderUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -18,6 +17,8 @@ import java.util.Map;
  * @version 2022.1.1
  * https://www.linkedin.com/in/mahdisharifi/
  * @since 5/1/22
+ *
+ *  Handle log request and response of request + headers when put Loggable on the method.
  */
 
 @Aspect //let know Spring that this is an Aspect class
@@ -45,7 +46,7 @@ public class LoggableAspectHandler {
 
         String rest = httpServletRequest.getMethod() + " " + httpServletRequest.getServletPath();
 
-        String clientIp = AppUtil.getRequestClientIpComplete(httpServletRequest);
+        String clientIp = HeaderUtil.getRequestClientIpComplete(httpServletRequest);
         Object result = joinPoint.proceed();
 
         Map<String, String> mapResponse = HeaderUtil.getHeadersInfo(httpServletResponse);

@@ -12,6 +12,7 @@ import java.util.Map;
  * @version 2022.1.1
  * https://www.linkedin.com/in/mahdisharifi/
  * @since 4/27/22
+ * When account not found throw this exception
  */
 @Getter
 public class AccountNotFoundException extends AbstractThrowableProblem {

@@ -12,6 +12,7 @@ import java.util.concurrent.TimeUnit;
  * @version 2022.1.1
  * https://www.linkedin.com/in/mahdisharifi/
  * @since 5/1/22
+ * This cache used for handle Idempotence and rate control
  */
 @Configuration
 public class CaffeineCacheConfig {
