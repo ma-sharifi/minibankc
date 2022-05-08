@@ -1,12 +1,11 @@
 package com.example.minibankc.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -15,6 +14,7 @@ import javax.validation.constraints.NotNull;
  * https://www.linkedin.com/in/mahdisharifi/
  * @since 4/26/22
  */
+
 /**
  * save Transaction of account
  */
@@ -38,7 +38,7 @@ public class AccountTransaction extends BaseEntity {
     private Long referenceNo;
 
     @ManyToOne
-    @JsonIgnoreProperties(value = {  "accountTransactions", "customer" }, allowSetters = true)
+    @JoinColumn(name = "fk_account")
     private Account account;
 
     public AccountTransaction(long amount) {

@@ -14,7 +14,7 @@ spring:
     username: root
     password: root
     driver-class-name: org.mariadb.jdbc.Driver
-  jpa.hibernate.ddl-auto: create
+  jpa.hibernate.ddl-auto: create-drop
 
 server:
   port: 8080

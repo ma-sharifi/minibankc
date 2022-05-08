@@ -3,8 +3,8 @@ environement:
 
 logging:
   level:
-    ROOT: DEBUG
-    org.hibernate.SQL: DEBUG
+    ROOT: INFO
+#    org.hibernate.SQL: DEBUG
     com.example: DEBUG
 
 spring:

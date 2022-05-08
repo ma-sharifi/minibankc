@@ -31,8 +31,7 @@ public class Customer extends BaseEntity {
     @Column(name = "surname", length = 60)
     private String surname;
 
-    @OneToMany(fetch = FetchType.EAGER,mappedBy = "customer",cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnoreProperties(value = { "accountTransactions", "customer" }, allowSetters = true)
+    @OneToMany(fetch = FetchType.LAZY,mappedBy = "customer",cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Account> accounts = new HashSet<>();
 
     public void addAccount(Account account) {

@@ -54,10 +54,13 @@ class CustomerControllerTestIT {
 
     @Autowired
     private CustomerRepository customerRepository;
+
     @Autowired
     private CustomerMapper customerMapper;
+
     @Autowired
     private EntityManager em;
+
     @Autowired
     private MockMvc restCustomerMockMvc;
     private Customer customer;
