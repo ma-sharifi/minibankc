@@ -30,13 +30,11 @@ public class Account extends BaseEntity {
     private long balance;
 
     //https://vladmihalcea.com/the-best-way-to-map-a-onetomany-association-with-jpa-and-hibernate/
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnoreProperties(value = { "account" }, allowSetters = true)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<AccountTransaction> accountTransactions = new HashSet<>();
 
     @ManyToOne
-    @JsonIgnoreProperties(value = { "account" }, allowSetters = true)
-    @JsonIgnore
+    @JoinColumn(name = "fk_customer")
     private Customer customer;
 
     public Account(Customer customer) {

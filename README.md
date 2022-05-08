@@ -46,7 +46,12 @@ GET http://localhost:8080/v1/customers/1
 
 3- Get account details:
 GET http://localhost:8080/v1/accounts/2
-This file will be completed...
+
+4- Get all customers
+GET http://localhost:8080/v1/customers?sort=id,desc&page=0&size=2
+
+5- Get all acounts
+http://localhost:8080/v1/accounts?sort=id,asc&page=0&size=2
 
 ## Initial Configuration
 1.	Apache Maven (http://maven.apache.org)  This code have been compiled with Java version 11.

@@ -39,6 +39,5 @@ class AccountRepositoryTestIT {
 
         assertNotNull(accountFound);
         assertThat(accountPersisted.getBalance()).isEqualTo(accountFound.getBalance());
-
     }
 }
